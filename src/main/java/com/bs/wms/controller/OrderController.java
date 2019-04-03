@@ -1,15 +1,12 @@
 package com.bs.wms.controller;
 
 import com.bs.wms.entity.OrderInfo;
-import com.bs.wms.entity.SysUser;
 import com.bs.wms.query.OrderInfoQuery;
 import com.bs.wms.service.OrderInfoService;
-import com.bs.wms.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
