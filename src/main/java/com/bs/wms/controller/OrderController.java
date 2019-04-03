@@ -23,7 +23,7 @@ public class OrderController {
      */
     @GetMapping
     public List<OrderInfo> getOrderList(@RequestParam OrderInfoQuery orderInfoQuery) {
-//        List orderInfoList = orderInfoService.getOrderList(orderInfoQuery);
+        List orderInfoList = orderInfoService.getOrderList(orderInfoQuery);
         return null;
     }
 
