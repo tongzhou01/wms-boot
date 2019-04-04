@@ -29,7 +29,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     public Page<OrderInfoVO> listOrder(OrderInfoQuery orderInfoQuery) {
         Page<OrderInfoVO> page = new Page<>();
         PageHelper.startPage(orderInfoQuery.getPageNum(), orderInfoQuery.getPageSize());//分页查询
-        List<OrderInfoVO> orderInfoVOList = orderInfoDao.listOrder();
+        List<OrderInfoVO> orderInfoVOList = orderInfoDao.listOrder(orderInfoQuery);
         page.setRows(orderInfoVOList);
         return page;
     }
@@ -38,8 +38,53 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     public R saveOrder(SaveOrderDto saveOrderDto) {
         List<OrderItem> orderItems = saveOrderDto.getOrderItems();
         OrderInfo orderInfo = saveOrderDto.getOrderInfo();
-        orderInfoDao.insertSelective(orderInfo);
-        orderItemDao.batchSave(orderItems);
-        return null;
+        try {
+            // 新增订单信息
+            orderInfoDao.insertSelective(orderInfo);
+            Long orderId = orderInfo.getId();
+            if (orderId != null) {
+                // 新增商品信息
+                orderItems.forEach(orderItem -> orderItem.setOrderId(orderId));
+                orderItemDao.batchSave(orderItems);
+            }
+        } catch (Exception e) {
+            return R.error();
+        }
+        return R.ok();
+    }
+
+    @Override
+    public R getOrder(Long id) {
+        return R.setData(orderInfoDao.getOrder(id));
+    }
+
+    @Override
+    public R updateOrder(SaveOrderDto saveOrderDto) {
+        OrderInfo orderInfo = saveOrderDto.getOrderInfo();
+        List<OrderItem> orderItems = saveOrderDto.getOrderItems();
+        try {
+            // 更新订单信息
+            orderInfoDao.updateByPrimaryKeySelective(orderInfo);
+            // 更新商品信息
+            orderItems.forEach(orderItem -> orderItemDao.updateByPrimaryKeySelective(orderItem));
+        } catch (Exception e) {
+            R.error();
+        }
+        return R.ok();
+    }
+
+    @Override
+    public R deleteOrder(Long id) {
+        try {
+            // 删除订单
+            int i = orderInfoDao.deleteByPrimaryKey(id);
+            if (i > 0) {
+                // 删除商品
+                orderItemDao.deleteByOrderId(id);
+            }
+        } catch (Exception e) {
+            return R.error();
+        }
+        return R.ok();
     }
 }

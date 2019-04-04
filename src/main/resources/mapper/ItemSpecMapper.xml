@@ -90,4 +90,12 @@
         modify_time = #{modifyTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=BIGINT}
     </update>
+
+    <select id="listItemSpec" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from item_spec
+        order by id desc
+    </select>
+
 </mapper>

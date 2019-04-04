@@ -2,23 +2,23 @@ package com.bs.wms.common.entity;
 
 public class Query {
 
-    private int pageSize = 10;
+    private Integer pageSize;
 
-    private int pageNum = 1;
+    private Integer pageNum;
 
-    public int getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
 
-    public int getPageNum() {
+    public Integer getPageNum() {
         return pageNum;
     }
 
-    public void setPageNum(int pageNum) {
+    public void setPageNum(Integer pageNum) {
         this.pageNum = pageNum;
     }
 }

@@ -1,5 +1,7 @@
 package com.bs.wms.common.entity;
 
+import com.bs.wms.constant.MsgConstant;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +14,7 @@ public class R extends HashMap<String, Object> {
     }
 
     public static R error() {
-        return error(500, "未知异常，请联系管理员");
+        return error(500, "操作异常");
     }
 
     public static R error(String msg) {
@@ -36,6 +38,13 @@ public class R extends HashMap<String, Object> {
         R r = new R();
         r.putAll(map);
         return r;
+    }
+
+    public static R setData(Object data) {
+        if (data == null) {
+            return R.error(MsgConstant.DATA_IS_NULL);
+        }
+        return R.ok().put("data", data);
     }
 
     public static R ok() {

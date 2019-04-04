@@ -12,4 +12,6 @@ public interface OrderItemDao extends BaseDao<OrderItem> {
     List<OrderItem> selectItemByOrderId();
 
     int batchSave(List<OrderItem> orderItems);
+
+    int deleteByOrderId(Long orderId);
 }

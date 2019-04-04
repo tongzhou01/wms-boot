@@ -22,4 +22,20 @@ public interface OrderInfoService {
      * @return
      */
     R saveOrder(SaveOrderDto saveOrderDto);
+
+    /**
+     * 查询订单详情
+     * @param id
+     * @return
+     */
+    R getOrder(Long id);
+
+    /**
+     * 更新订单信息
+     * @param saveOrderDto
+     * @return
+     */
+    R updateOrder(SaveOrderDto saveOrderDto);
+
+    R deleteOrder(Long id);
 }

@@ -52,7 +52,7 @@
       #{signStatus,jdbcType=TINYINT}, #{invoicePerson,jdbcType=VARCHAR}, #{remake,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP})
   </insert>
-    <insert id="insertSelective" parameterType="com.bs.wms.entity.OrderInfo">
+    <insert id="insertSelective" parameterType="com.bs.wms.entity.OrderInfo" useGeneratedKeys="true" keyProperty="id">
         insert into order_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -241,5 +241,12 @@
         <include refid="Base_Column_List"/>
         FROM order_info
         ORDER BY id DESC
+    </select>
+
+    <select id="getOrder" resultMap="OrderVOResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM order_info
+        where id = #{orderId}
     </select>
 </mapper>

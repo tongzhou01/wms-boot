@@ -3,7 +3,6 @@ package com.bs.wms.controller;
 import com.bs.wms.common.entity.Page;
 import com.bs.wms.common.entity.R;
 import com.bs.wms.dto.SaveOrderDto;
-import com.bs.wms.entity.OrderInfo;
 import com.bs.wms.query.OrderInfoQuery;
 import com.bs.wms.service.OrderInfoService;
 import com.bs.wms.vo.OrderInfoVO;
@@ -48,20 +47,19 @@ public class OrderController {
      * @return
      */
     @GetMapping("/{id}")
-    public OrderInfo getOrder(@PathVariable Long id) {
-        return null;
+    public R getOrder(@PathVariable Long id) {
+        return orderInfoService.getOrder(id);
     }
 
     /**
      * 更新订单信息
      *
-     * @param id
-     * @param orderInfo
+     * @param saveOrderDto
      * @return
      */
-    @PutMapping("/{id}")
-    public String updateOrder(@PathVariable Long id, @RequestBody OrderInfo orderInfo) {
-        return "success";
+    @PutMapping
+    public R updateOrder(@RequestBody SaveOrderDto saveOrderDto) {
+        return orderInfoService.updateOrder(saveOrderDto);
     }
 
     /**
@@ -71,8 +69,8 @@ public class OrderController {
      * @return
      */
     @DeleteMapping("/{id}")
-    public String deleteOrder(@PathVariable Long id) {
-        return "success";
+    public R deleteOrder(@PathVariable Long id) {
+        return orderInfoService.deleteOrder(id);
     }
 
 }
