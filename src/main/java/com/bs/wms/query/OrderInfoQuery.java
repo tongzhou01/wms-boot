@@ -1,4 +1,6 @@
 package com.bs.wms.query;
 
-public class OrderInfoQuery {
+import com.bs.wms.common.entity.Query;
+
+public class OrderInfoQuery extends Query {
 }

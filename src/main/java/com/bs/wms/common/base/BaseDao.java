@@ -1,4 +1,4 @@
-package com.bs.wms.common;
+package com.bs.wms.common.base;
 
 /**
  * 通用接口

@@ -1,153 +1,201 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bs.wms.dao.OrderItemDao">
-  <resultMap id="BaseResultMap" type="com.bs.wms.entity.OrderItem">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
-    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
-    <result column="reserve_number" jdbcType="INTEGER" property="reserveNumber" />
-    <result column="delivery_number" jdbcType="INTEGER" property="deliveryNumber" />
-    <result column="unit_price" jdbcType="DECIMAL" property="unitPrice" />
-    <result column="amount" jdbcType="DECIMAL" property="amount" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    id, order_id, item_name, reserve_number, delivery_number, unit_price, amount, remark, 
-    create_time, modify_time
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from order_item
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from order_item
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.bs.wms.entity.OrderItem">
-    insert into order_item (id, order_id, item_name, 
-      reserve_number, delivery_number, unit_price, 
-      amount, remark, create_time, 
-      modify_time)
-    values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
-      #{reserveNumber,jdbcType=INTEGER}, #{deliveryNumber,jdbcType=INTEGER}, #{unitPrice,jdbcType=DECIMAL}, 
-      #{amount,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyTime,jdbcType=TIMESTAMP})
-  </insert>
-  <insert id="insertSelective" parameterType="com.bs.wms.entity.OrderItem">
-    insert into order_item
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="orderId != null">
-        order_id,
-      </if>
-      <if test="itemName != null">
-        item_name,
-      </if>
-      <if test="reserveNumber != null">
-        reserve_number,
-      </if>
-      <if test="deliveryNumber != null">
-        delivery_number,
-      </if>
-      <if test="unitPrice != null">
-        unit_price,
-      </if>
-      <if test="amount != null">
-        amount,
-      </if>
-      <if test="remark != null">
-        remark,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="modifyTime != null">
-        modify_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="orderId != null">
-        #{orderId,jdbcType=VARCHAR},
-      </if>
-      <if test="itemName != null">
-        #{itemName,jdbcType=VARCHAR},
-      </if>
-      <if test="reserveNumber != null">
-        #{reserveNumber,jdbcType=INTEGER},
-      </if>
-      <if test="deliveryNumber != null">
-        #{deliveryNumber,jdbcType=INTEGER},
-      </if>
-      <if test="unitPrice != null">
-        #{unitPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="amount != null">
-        #{amount,jdbcType=DECIMAL},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyTime != null">
-        #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bs.wms.entity.OrderItem">
-    update order_item
-    <set>
-      <if test="orderId != null">
-        order_id = #{orderId,jdbcType=VARCHAR},
-      </if>
-      <if test="itemName != null">
+    <resultMap id="BaseResultMap" type="com.bs.wms.entity.OrderItem">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="order_id" jdbcType="BIGINT" property="orderId"/>
+        <result column="spec_id" jdbcType="BIGINT" property="specId"/>
+        <result column="item_name" jdbcType="VARCHAR" property="itemName"/>
+        <result column="reserve_number" jdbcType="INTEGER" property="reserveNumber"/>
+        <result column="delivery_number" jdbcType="INTEGER" property="deliveryNumber"/>
+        <result column="unit_price" jdbcType="DECIMAL" property="unitPrice"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, order_id, spec_id, item_name, reserve_number, delivery_number, unit_price, amount,
+        remark, create_time, modify_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from order_item
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from order_item
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.bs.wms.entity.OrderItem">
+        insert into order_item (id, order_id, spec_id,
+        item_name, reserve_number, delivery_number,
+        unit_price, amount, remark,
+        create_time, modify_time)
+        values (#{id,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, #{specId,jdbcType=BIGINT},
+        #{itemName,jdbcType=VARCHAR}, #{reserveNumber,jdbcType=INTEGER}, #{deliveryNumber,jdbcType=INTEGER},
+        #{unitPrice,jdbcType=DECIMAL}, #{amount,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="com.bs.wms.entity.OrderItem">
+        insert into order_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="orderId != null">
+                order_id,
+            </if>
+            <if test="specId != null">
+                spec_id,
+            </if>
+            <if test="itemName != null">
+                item_name,
+            </if>
+            <if test="reserveNumber != null">
+                reserve_number,
+            </if>
+            <if test="deliveryNumber != null">
+                delivery_number,
+            </if>
+            <if test="unitPrice != null">
+                unit_price,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="modifyTime != null">
+                modify_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=BIGINT},
+            </if>
+            <if test="specId != null">
+                #{specId,jdbcType=BIGINT},
+            </if>
+            <if test="itemName != null">
+                #{itemName,jdbcType=VARCHAR},
+            </if>
+            <if test="reserveNumber != null">
+                #{reserveNumber,jdbcType=INTEGER},
+            </if>
+            <if test="deliveryNumber != null">
+                #{deliveryNumber,jdbcType=INTEGER},
+            </if>
+            <if test="unitPrice != null">
+                #{unitPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="amount != null">
+                #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bs.wms.entity.OrderItem">
+        update order_item
+        <set>
+            <if test="orderId != null">
+                order_id = #{orderId,jdbcType=BIGINT},
+            </if>
+            <if test="specId != null">
+                spec_id = #{specId,jdbcType=BIGINT},
+            </if>
+            <if test="itemName != null">
+                item_name = #{itemName,jdbcType=VARCHAR},
+            </if>
+            <if test="reserveNumber != null">
+                reserve_number = #{reserveNumber,jdbcType=INTEGER},
+            </if>
+            <if test="deliveryNumber != null">
+                delivery_number = #{deliveryNumber,jdbcType=INTEGER},
+            </if>
+            <if test="unitPrice != null">
+                unit_price = #{unitPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifyTime != null">
+                modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bs.wms.entity.OrderItem">
+        update order_item
+        set order_id = #{orderId,jdbcType=BIGINT},
+        spec_id = #{specId,jdbcType=BIGINT},
         item_name = #{itemName,jdbcType=VARCHAR},
-      </if>
-      <if test="reserveNumber != null">
         reserve_number = #{reserveNumber,jdbcType=INTEGER},
-      </if>
-      <if test="deliveryNumber != null">
         delivery_number = #{deliveryNumber,jdbcType=INTEGER},
-      </if>
-      <if test="unitPrice != null">
         unit_price = #{unitPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="amount != null">
         amount = #{amount,jdbcType=DECIMAL},
-      </if>
-      <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyTime != null">
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.bs.wms.entity.OrderItem">
-    update order_item
-    set order_id = #{orderId,jdbcType=VARCHAR},
-      item_name = #{itemName,jdbcType=VARCHAR},
-      reserve_number = #{reserveNumber,jdbcType=INTEGER},
-      delivery_number = #{deliveryNumber,jdbcType=INTEGER},
-      unit_price = #{unitPrice,jdbcType=DECIMAL},
-      amount = #{amount,jdbcType=DECIMAL},
-      remark = #{remark,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="selectItemByOrderId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM order_item
+        WHERE order_id = #{orderId}
+        ORDER BY id DESC
+    </select>
+
+    <insert id="batchSave">
+        INSERT INTO order_item
+            (id,
+            order_id,
+            spec_id,
+            item_name,
+            reserve_number,
+            delivery_number,
+            unit_price,
+            amount,
+            remark,
+            create_time,
+            modify_time)
+        VALUES
+        <foreach collection="orderItems" item="item" separator=",">
+            (#{id,jdbcType=BIGINT},
+            #{orderId,jdbcType=BIGINT},
+            #{specId,jdbcType=BIGINT},
+            #{itemName,jdbcType=VARCHAR},
+            #{reserveNumber,jdbcType=INTEGER},
+            #{deliveryNumber,jdbcType=INTEGER},
+            #{unitPrice,jdbcType=DECIMAL},
+            #{amount,jdbcType=DECIMAL},
+            #{remark,jdbcType=VARCHAR},
+            #{createTime,jdbcType=TIMESTAMP},
+            #{modifyTime,jdbcType=TIMESTAMP})
+        </foreach>
+    </insert>
 </mapper>
