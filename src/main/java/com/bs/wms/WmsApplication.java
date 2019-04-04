@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("com.bs.wms.dao")
 public class WmsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(WmsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(WmsApplication.class, args);
+    }
 
 }

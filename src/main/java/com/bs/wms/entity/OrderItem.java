@@ -6,7 +6,9 @@ import java.util.Date;
 public class OrderItem {
     private Long id;
 
-    private String orderId;
+    private Long orderId;
+
+    private Long specId;
 
     private String itemName;
 
@@ -32,12 +34,20 @@ public class OrderItem {
         this.id = id;
     }
 
-    public String getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId == null ? null : orderId.trim();
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    public Long getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(Long specId) {
+        this.specId = specId;
     }
 
     public String getItemName() {
