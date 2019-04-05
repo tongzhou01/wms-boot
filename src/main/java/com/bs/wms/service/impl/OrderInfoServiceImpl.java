@@ -14,6 +14,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -40,6 +41,8 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         OrderInfo orderInfo = saveOrderDto.getOrderInfo();
         try {
             // 新增订单信息
+            orderInfo.setCreateTime(new Date());
+            orderInfo.setModifyTime(new Date());
             orderInfoDao.insertSelective(orderInfo);
             Long orderId = orderInfo.getId();
             if (orderId != null) {
@@ -64,9 +67,13 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         List<OrderItem> orderItems = saveOrderDto.getOrderItems();
         try {
             // 更新订单信息
+            orderInfo.setModifyTime(new Date());
             orderInfoDao.updateByPrimaryKeySelective(orderInfo);
             // 更新商品信息
-            orderItems.forEach(orderItem -> orderItemDao.updateByPrimaryKeySelective(orderItem));
+            orderItems.forEach(orderItem -> {
+                orderItem.setModifyTime(new Date());
+                orderItemDao.updateByPrimaryKeySelective(orderItem);
+            });
         } catch (Exception e) {
             R.error();
         }

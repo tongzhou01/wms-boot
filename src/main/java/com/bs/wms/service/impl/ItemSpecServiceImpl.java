@@ -10,6 +10,7 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,6 +32,8 @@ public class ItemSpecServiceImpl implements ItemSpecService {
     public R saveItemSpec(ItemSpec itemSpec) {
         try {
             // 新增产品规格信息
+            itemSpec.setCreateTime(new Date());
+            itemSpec.setModifyTime(new Date());
             itemSpecDao.insertSelective(itemSpec);
         } catch (Exception e) {
             return R.error();
@@ -47,6 +50,7 @@ public class ItemSpecServiceImpl implements ItemSpecService {
     public R updateItemSpec(ItemSpec itemSpec) {
         try {
             // 更新产品规格信息
+            itemSpec.setModifyTime(new Date());
             itemSpecDao.updateByPrimaryKeySelective(itemSpec);
         } catch (Exception e) {
             R.error();

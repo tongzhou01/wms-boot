@@ -194,8 +194,8 @@
             #{unitPrice,jdbcType=DECIMAL},
             #{amount,jdbcType=DECIMAL},
             #{remark,jdbcType=VARCHAR},
-            #{createTime,jdbcType=TIMESTAMP},
-            #{modifyTime,jdbcType=TIMESTAMP})
+            now(),
+            now())
         </foreach>
     </insert>
 

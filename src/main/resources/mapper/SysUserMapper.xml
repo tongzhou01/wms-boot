@@ -125,4 +125,17 @@
         modify_time = #{modifyTime,jdbcType=TIMESTAMP}
         where user_id = #{userId,jdbcType=BIGINT}
     </update>
+
+    <select id="listSysUser" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+        order by id desc
+    </select>
+    <select id="getUserByName" resultType="com.bs.wms.entity.SysUser">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user where username = #{username}
+    </select>
+
 </mapper>
