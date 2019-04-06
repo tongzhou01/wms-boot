@@ -8,6 +8,7 @@ import com.bs.wms.service.ItemSpecService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("/spec")
@@ -23,8 +24,11 @@ public class ItemSpecController {
      * @return
      */
     @GetMapping
-    public Page<ItemSpec> getItemSpecList(ItemSpecQuery itemSpecQuery) {
-        return itemSpecService.listItemSpec(itemSpecQuery);
+    public ModelAndView getItemSpecList(ModelAndView modelAndView, ItemSpecQuery itemSpecQuery) {
+        Page<ItemSpec> itemSpecPage = itemSpecService.listItemSpec(itemSpecQuery);
+        modelAndView.addObject("itemSpecPage", itemSpecPage);
+        modelAndView.setViewName("/spec/list");
+        return modelAndView;
     }
 
     /**

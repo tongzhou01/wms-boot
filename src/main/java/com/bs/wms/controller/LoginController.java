@@ -1,6 +1,5 @@
 package com.bs.wms.controller;
 
-import com.bs.wms.common.entity.R;
 import com.bs.wms.constant.BaseConstant;
 import com.bs.wms.entity.SysUser;
 import com.bs.wms.service.SysUserService;
@@ -18,9 +17,9 @@ public class LoginController {
     @Autowired
     SysUserService sysUserService;
 
-    @GetMapping
-    public ModelAndView index(ModelAndView modelAndView) {
-        modelAndView.setViewName("index");
+    @GetMapping("/")
+    public ModelAndView home(ModelAndView modelAndView) {
+        modelAndView.setViewName("home");
         return modelAndView;
     }
 
@@ -30,17 +29,29 @@ public class LoginController {
         return modelAndView;
     }
 
+    @GetMapping("/logout")
+    public ModelAndView login(ModelAndView modelAndView, HttpSession httpSession) {
+        httpSession.removeAttribute(BaseConstant.USERNAME);
+        modelAndView.setViewName("redirect:login");
+        return modelAndView;
+    }
+
     @PostMapping("/login")
-    public R login(@RequestParam String username, @RequestParam String password, HttpSession httpSession) {
+    public ModelAndView login(@RequestParam String username, @RequestParam String password, HttpSession httpSession, ModelAndView modelAndView) {
         SysUser sysUser = sysUserService.getUserByName(username);
         if (sysUser == null) {
-            return R.error("用户不存在");
+            modelAndView.addObject("error","用户不存在");
+            return modelAndView;
         } else {
             if (sysUser.getPassword().equals(MD5Util.MD5Encode(password))) {
                 httpSession.setAttribute(BaseConstant.USERNAME, username);
-                return R.ok();
+                httpSession.setAttribute(BaseConstant.REAL_NAME, sysUser.getRealName());
+                httpSession.setMaxInactiveInterval(30*60);
+                modelAndView.setViewName("redirect:/");
+                return modelAndView;
             } else {
-                return R.error("密码错误");
+                modelAndView.addObject("error","密码错误");
+                return modelAndView;
             }
         }
     }

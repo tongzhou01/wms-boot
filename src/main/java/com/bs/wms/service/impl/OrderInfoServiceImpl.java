@@ -45,7 +45,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             orderInfo.setModifyTime(new Date());
             orderInfoDao.insertSelective(orderInfo);
             Long orderId = orderInfo.getId();
-            if (orderId != null) {
+            if (orderId != null && orderItems != null) {
                 // 新增商品信息
                 orderItems.forEach(orderItem -> orderItem.setOrderId(orderId));
                 orderItemDao.batchSave(orderItems);

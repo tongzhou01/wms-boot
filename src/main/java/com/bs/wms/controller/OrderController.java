@@ -34,7 +34,7 @@ public class OrderController {
      * @param saveOrderDto
      * @return
      */
-    @PostMapping(value = "/")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public R saveOrder(@RequestBody SaveOrderDto saveOrderDto) {
         return orderInfoService.saveOrder(saveOrderDto);

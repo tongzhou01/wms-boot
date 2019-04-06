@@ -20,7 +20,7 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
-    <resultMap id="OrderVOResultMap" type="com.bs.wms.vo.OrderInfoVO">
+    <resultMap id="OrderVOResultMap" type="com.bs.wms.vo.OrderInfoVO" extends="BaseResultMap">
         <collection column="{orderId=id}" select="com.bs.wms.dao.OrderItemDao.selectItemByOrderId" property="orderItems" ofType="com.bs.wms.entity.OrderItem"/>
     </resultMap>
     <sql id="Base_Column_List">

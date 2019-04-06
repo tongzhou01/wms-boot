@@ -8,6 +8,7 @@ import com.bs.wms.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 @RequestMapping("sys/user")
@@ -23,8 +24,11 @@ public class SysUserController {
      * @return
      */
     @GetMapping
-    public Page<SysUser> getSysUserList(SysUserQuery sysUserQuery) {
-        return sysUserService.listSysUser(sysUserQuery);
+    public ModelAndView getSysUserList(ModelAndView modelAndView, SysUserQuery sysUserQuery) {
+        Page<SysUser> sysUserPage = sysUserService.listSysUser(sysUserQuery);
+        modelAndView.addObject("sysUserPage", sysUserPage);
+        modelAndView.setViewName("user/list");
+        return modelAndView;
     }
 
     /**

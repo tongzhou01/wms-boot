@@ -3,11 +3,14 @@ server:
 
 ## 数据源配置
 spring:
+  mvc:
+    view:
+      suffix: .html
   datasource:
     url: jdbc:mysql://101.132.127.242:3306/wms?useUnicode=true&characterEncoding=utf8
     username: root
     password: 46FD38a27fab4f8dAB57d203aA98dCF9@201032Tz
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
 ## Mybatis 配置
 mybatis:

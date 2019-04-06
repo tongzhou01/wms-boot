@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header::header('用户管理')"/>
+<body>
+<nav th:replace="include/top::top-nav"></nav>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="include/left::left-nav('user')"></div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h3 class="sub-header">用户管理</h3>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>用户名</th>
+                        <th>姓名</th>
+                        <th>邮箱</th>
+                        <th>电话</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="sysUser,status:${sysUserPage.rows}">
+                        <td th:text="${status.count}"></td>
+                        <td th:text="${sysUser.username}"></td>
+                        <td th:text="${sysUser.realName}"></td>
+                        <td th:text="${sysUser.email}"></td>
+                        <td th:text="${sysUser.phone}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include/footer::footer"></div>
+</body>
+</html>

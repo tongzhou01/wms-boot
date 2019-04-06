@@ -3,7 +3,7 @@ package com.bs.wms.entity;
 import java.util.Date;
 
 public class SysUser {
-    private Long userId;
+    private Long id;
 
     private String username;
 
@@ -19,12 +19,12 @@ public class SysUser {
 
     private Date modifyTime;
 
-    public Long getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
