@@ -14,4 +14,6 @@ public interface OrderInfoDao extends BaseDao<OrderInfo> {
     List<OrderInfoVO> listOrder(OrderInfoQuery orderInfoQuery);
 
     OrderInfoVO getOrder(Long orderId);
+
+    Integer selectMaxId();
 }

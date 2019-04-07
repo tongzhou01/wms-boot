@@ -9,6 +9,7 @@ import com.bs.wms.entity.OrderInfo;
 import com.bs.wms.entity.OrderItem;
 import com.bs.wms.query.OrderInfoQuery;
 import com.bs.wms.service.OrderInfoService;
+import com.bs.wms.util.DateUtil;
 import com.bs.wms.vo.OrderInfoVO;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +42,17 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         OrderInfo orderInfo = saveOrderDto.getOrderInfo();
         try {
             // 新增订单信息
+            Integer maxId = orderInfoDao.selectMaxId();
+            if (maxId == null) {
+                maxId = 1;
+            }
+            String orderNo = DateUtil.getCurrentTimeByDay().replace("-", "").concat(Integer.toString(maxId + 10001));
+            orderInfo.setOrderNo(orderNo);
             orderInfo.setCreateTime(new Date());
             orderInfo.setModifyTime(new Date());
             orderInfoDao.insertSelective(orderInfo);
             Long orderId = orderInfo.getId();
-            if (orderId != null && orderItems != null) {
+            if (orderId != null && orderItems != null && orderItems.size() > 0) {
                 // 新增商品信息
                 orderItems.forEach(orderItem -> orderItem.setOrderId(orderId));
                 orderItemDao.batchSave(orderItems);

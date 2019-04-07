@@ -19,7 +19,7 @@ public class LoginController {
 
     @GetMapping("/")
     public ModelAndView home(ModelAndView modelAndView) {
-        modelAndView.setViewName("home");
+        modelAndView.setViewName("user/list");
         return modelAndView;
     }
 

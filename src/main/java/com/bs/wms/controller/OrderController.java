@@ -7,7 +7,6 @@ import com.bs.wms.query.OrderInfoQuery;
 import com.bs.wms.service.OrderInfoService;
 import com.bs.wms.vo.OrderInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,7 +34,6 @@ public class OrderController {
      * @return
      */
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
     public R saveOrder(@RequestBody SaveOrderDto saveOrderDto) {
         return orderInfoService.saveOrder(saveOrderDto);
     }

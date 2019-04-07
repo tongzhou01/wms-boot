@@ -9,8 +9,8 @@ var TableInit = function () {
     var oTableInit = new Object();
     //初始化Table
     oTableInit.Init = function () {
-        $('#tb_order').bootstrapTable({
-            url: '/order',         //请求后台的URL（*）
+        $('#tb_spec').bootstrapTable({
+            url: '/spec',         //请求后台的URL（*）
             method: 'get',                      //请求方式（*）
             toolbar: '#toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -29,7 +29,7 @@ var TableInit = function () {
             showRefresh: true,                  //是否显示刷新按钮
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
-            // height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            // height: 800,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
             uniqueId: "id",                     //每一行的唯一标识，一般为主键列
             showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
@@ -37,21 +37,12 @@ var TableInit = function () {
             columns: [{
                 checkbox: true
             }, {
-                field: 'orderName',
-                title: '订单名称'
+                field: 'name',
+                title: '规格名称'
             }, {
-                field: 'orderNo',
-                title: '订单号'
-            }, {
-                field: 'deliveryAddress',
-                title: '送货地址'
-            }, {
-                field: 'deliveryDate',
-                title: '送货日期'
-            }, {
-                field: 'totalAmount',
-                title: '总金额'
-            }, {
+                field: 'unit',
+                title: '单位属性'
+            },{
                 field: 'id',
                 title: '操作',
                 width: 120,
@@ -77,7 +68,6 @@ var TableInit = function () {
 function actionFormatter(value, row, index) {
     var id = value;
     var result = "";
-    result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"showItem('" + id + "')\" title='商品列表'><span class='glyphicon glyphicon-search'></span></a>";
     result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"showData('" + id + "')\" title='查看'><span class='glyphicon glyphicon-search'></span></a>";
     result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"editData('" + id + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
     result += "<a href='javascript:;' class='btn btn-xs red' onclick=\"delData('" + id + "')\" title='删除'><span class='glyphicon glyphicon-remove'></span></a>";
@@ -87,24 +77,16 @@ function actionFormatter(value, row, index) {
 function getData(id) {
     $.ajax({
         type : "GET",
-        url : "/order/" + id,
+        url : "/spec/" + id,
         success : function(result) {
             if (result.code == 0) {
                 var data = result.data;
                 console.log(data);
-                $('#orderName').val(data.orderName);
-                $('#companyName').val(data.companyName);
-                $('#customerName').val(data.customerName);
-                $('#deliveryPerson').val(data.deliveryPerson);
-                $('#deliveryAddress').val(data.deliveryAddress);
-                $('#deliveryDate').val(data.deliveryDate);
-                $('#totalAmount').val(data.totalAmount);
-                $('#signPerson').val(data.signPerson);
-                $('#invoicePerson').val(data.invoicePerson);
-                $('#remake').val(data.remake);
+                $('#name').val(data.name);
+                $('#unit').val(data.unit);
                 $('#id').val(data.id);
             } else {
-                dialogErrorMsg("查询订单详情异常");
+                dialogErrorMsg("查询产品规格详情异常");
             }
         }
     });
@@ -112,108 +94,89 @@ function getData(id) {
 
 function addData() {
     // window.location.href = "add";
-    $('#orderInfoModal').modal('show');
+    $('#specModal').modal('show');
     $('#myModalLabel').text('新增');
-    $('#submit').show().off("click").on('click', saveOrder);
+    $('#submit').show().off("click").on('click', saveSpec);
 }
 
-/*function showData(id) {
-    $('#orderInfoModal').modal('show');
+function showData(id) {
+    $('#specModal').modal('show');
     $('#myModalLabel').text('详情');
     getData(id);
     $('#submit').hide();
-}*/
-function showData(id) {
-    window.open("/view/order/detail");
 }
 
 function editData(id) {
-    $('#orderInfoModal').modal('show');
+    $('#specModal').modal('show');
     $('#myModalLabel').text('修改');
     getData(id);
-    $('#submit').show().off("click").on('click', updateOrder);
+    $('#submit').show().off("click").on('click', updateSpec);
 }
 
 function delData(id) {
     $.ajax({
-        type: "DELETE",// 更新请求
-        url: "/order/" + id,
+        type: "DELETE",// 删除请求
+        url: "/spec/" + id,
         success: function (result) {
             if (result.code == 0) {
                 dialogSuccessMsg("删除成功");
-                $('#tb_order').bootstrapTable('refresh');
+                $('#tb_spec').bootstrapTable('refresh');
             }
         },
         error : function() {
-            dialogErrorMsg("删除订单异常");
+            dialogErrorMsg("删除产品规格异常");
         }
     });
 }
 
-function showItem(id) {
-    window.location.href = "/view/item/list?orderId=" + id;
-}
-
-
-function updateOrder() {
-    var orderForm = $('#orderForm').serializeObject();
-    var data = {"orderInfo":orderForm};
-    console.log("orderForm=" + orderForm);
+function updateSpec() {
+    var specForm = $('#specForm').serializeObject();
     $.ajax({
         contentType:"application/json",
         type: "PUT",// 更新请求
-        url: "/order" ,
-        data: JSON.stringify(data),
+        url: "/spec" ,
+        data: JSON.stringify(specForm),
         dataType: "json",//预期服务器返回的数据类型
         success: function (result) {
             if (result.code == 0) {
                 dialogSuccessMsg("保存成功");
-                $('#orderInfoModal').modal('hide');
-                $('#tb_order').bootstrapTable('refresh');
+                $('#specModal').modal('hide');
+                $('#tb_spec').bootstrapTable('refresh');
             }
         },
         error : function() {
-            dialogErrorMsg("更新订单信息异常");
-            $('#orderInfoModal').modal('hide');
+            dialogErrorMsg("更新产品规格信息异常");
+            $('#specModal').modal('hide');
         }
     });
 }
 
-function saveOrder() {
-    var orderForm = $('#orderForm').serializeObject();
-    var data = {"orderInfo":orderForm};
+function saveSpec() {
+    var specForm = $('#specForm').serializeObject();
     $.ajax({
         contentType:"application/json",
         type: "POST",// 新增请求
-        url: "/order" ,
-        data: JSON.stringify(data),
+        url: "/spec" ,
+        data: JSON.stringify(specForm),
         dataType: "json",//预期服务器返回的数据类型
         success: function (result) {
             if (result.code == 0) {
                 dialogSuccessMsg("保存成功");
-                $('#orderInfoModal').modal('hide');
-                $('#tb_order').bootstrapTable('refresh');
+                $('#specModal').modal('hide');
+                $('#tb_spec').bootstrapTable('refresh');
             }
         },
         error : function() {
-            dialogErrorMsg("保存订单信息异常");
-            $('#orderInfoModal').modal('hide');
+            dialogErrorMsg("保存产品规格信息异常");
+            $('#specModal').modal('hide');
         }
     });
 }
 
 //清除弹窗原数据
-$("#orderInfoModal").on("hidden.bs.modal", function() {
-    document.getElementById("orderForm").reset();
+$("#specModal").on("hidden.bs.modal", function() {
+    document.getElementById("specForm").reset();
 })
 
-$('#deliveryDate').datetimepicker({
-    minView: "month",
-    language: 'zh-CN',
-    format: 'yyyy-mm-dd',
-    autoclose: true,
-    todayBtn: true,
-    pickerPosition: "bottom-left"
-});
 
 

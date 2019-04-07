@@ -9,8 +9,8 @@ var TableInit = function () {
     var oTableInit = new Object();
     //初始化Table
     oTableInit.Init = function () {
-        $('#tb_order').bootstrapTable({
-            url: '/order',         //请求后台的URL（*）
+        $('#tb_item').bootstrapTable({
+            url: '/item',         //请求后台的URL（*）
             method: 'get',                      //请求方式（*）
             toolbar: '#toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -37,20 +37,20 @@ var TableInit = function () {
             columns: [{
                 checkbox: true
             }, {
-                field: 'orderName',
-                title: '订单名称'
+                field: 'itemName',
+                title: '商品名称'
             }, {
-                field: 'orderNo',
-                title: '订单号'
+                field: 'reserveNumber',
+                title: '预定数量'
             }, {
-                field: 'deliveryAddress',
-                title: '送货地址'
+                field: 'deliveryNumber',
+                title: '配送数量'
             }, {
-                field: 'deliveryDate',
-                title: '送货日期'
+                field: 'unitPrice',
+                title: '单价'
             }, {
-                field: 'totalAmount',
-                title: '总金额'
+                field: 'amount',
+                title: '金额'
             }, {
                 field: 'id',
                 title: '操作',
@@ -64,9 +64,11 @@ var TableInit = function () {
 
     //得到查询的参数
     oTableInit.queryParams = function (params) {
+        var orderId = $('#orderId').val();
         var temp = {   //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
             pageSize: params.limit,   //页面大小
             pageNum: (params.offset / params.limit) + 1,  //页码
+            orderId: orderId
         };
         return temp;
     };
@@ -77,7 +79,6 @@ var TableInit = function () {
 function actionFormatter(value, row, index) {
     var id = value;
     var result = "";
-    result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"showItem('" + id + "')\" title='商品列表'><span class='glyphicon glyphicon-search'></span></a>";
     result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"showData('" + id + "')\" title='查看'><span class='glyphicon glyphicon-search'></span></a>";
     result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"editData('" + id + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
     result += "<a href='javascript:;' class='btn btn-xs red' onclick=\"delData('" + id + "')\" title='删除'><span class='glyphicon glyphicon-remove'></span></a>";
@@ -87,24 +88,19 @@ function actionFormatter(value, row, index) {
 function getData(id) {
     $.ajax({
         type : "GET",
-        url : "/order/" + id,
+        url : "/item/" + id,
         success : function(result) {
             if (result.code == 0) {
                 var data = result.data;
                 console.log(data);
-                $('#orderName').val(data.orderName);
-                $('#companyName').val(data.companyName);
-                $('#customerName').val(data.customerName);
-                $('#deliveryPerson').val(data.deliveryPerson);
-                $('#deliveryAddress').val(data.deliveryAddress);
-                $('#deliveryDate').val(data.deliveryDate);
-                $('#totalAmount').val(data.totalAmount);
-                $('#signPerson').val(data.signPerson);
-                $('#invoicePerson').val(data.invoicePerson);
-                $('#remake').val(data.remake);
+                $('#itemName').val(data.itemName);
+                $('#reserveNumber').val(data.reserveNumber);
+                $('#deliveryNumber').val(data.deliveryNumber);
+                $('#unitPrice').val(data.unitPrice);
+                $('#amount').val(data.amount);
                 $('#id').val(data.id);
             } else {
-                dialogErrorMsg("查询订单详情异常");
+                dialogErrorMsg("查询商品详情异常");
             }
         }
     });
@@ -112,108 +108,86 @@ function getData(id) {
 
 function addData() {
     // window.location.href = "add";
-    $('#orderInfoModal').modal('show');
-    $('#myModalLabel').text('新增');
-    $('#submit').show().off("click").on('click', saveOrder);
+    $('#itemInfoModal').modal('show');
+    $('#submit').show().off("click").on('click', saveItem);
 }
 
-/*function showData(id) {
-    $('#orderInfoModal').modal('show');
-    $('#myModalLabel').text('详情');
+function showData(id) {
+    $('#itemInfoModal').modal('show');
     getData(id);
     $('#submit').hide();
-}*/
-function showData(id) {
-    window.open("/view/order/detail");
 }
 
 function editData(id) {
-    $('#orderInfoModal').modal('show');
-    $('#myModalLabel').text('修改');
+    $('#itemInfoModal').modal('show');
     getData(id);
-    $('#submit').show().off("click").on('click', updateOrder);
+    $('#submit').show().off("click").on('click', updateItem);
 }
 
 function delData(id) {
     $.ajax({
-        type: "DELETE",// 更新请求
-        url: "/order/" + id,
+        type: "DELETE",// 删除请求
+        url: "/item/" + id,
         success: function (result) {
             if (result.code == 0) {
                 dialogSuccessMsg("删除成功");
-                $('#tb_order').bootstrapTable('refresh');
+                $('#tb_item').bootstrapTable('refresh');
             }
         },
         error : function() {
-            dialogErrorMsg("删除订单异常");
+            dialogErrorMsg("删除商品异常");
         }
     });
 }
 
-function showItem(id) {
-    window.location.href = "/view/item/list?orderId=" + id;
-}
-
-
-function updateOrder() {
-    var orderForm = $('#orderForm').serializeObject();
-    var data = {"orderInfo":orderForm};
-    console.log("orderForm=" + orderForm);
+function updateItem() {
+    var orderItemForm = $('#orderItemForm').serializeObject();
     $.ajax({
         contentType:"application/json",
         type: "PUT",// 更新请求
-        url: "/order" ,
-        data: JSON.stringify(data),
+        url: "/item" ,
+        data: JSON.stringify(orderItemForm),
         dataType: "json",//预期服务器返回的数据类型
         success: function (result) {
             if (result.code == 0) {
                 dialogSuccessMsg("保存成功");
-                $('#orderInfoModal').modal('hide');
-                $('#tb_order').bootstrapTable('refresh');
+                $('#itemInfoModal').modal('hide');
+                $('#tb_item').bootstrapTable('refresh');
             }
         },
         error : function() {
-            dialogErrorMsg("更新订单信息异常");
-            $('#orderInfoModal').modal('hide');
+            dialogErrorMsg("更新商品信息异常");
+            $('#itemInfoModal').modal('hide');
         }
     });
 }
 
-function saveOrder() {
-    var orderForm = $('#orderForm').serializeObject();
-    var data = {"orderInfo":orderForm};
+function saveItem() {
+    var orderItemForm = $('#orderItemForm').serializeObject();
     $.ajax({
         contentType:"application/json",
         type: "POST",// 新增请求
-        url: "/order" ,
-        data: JSON.stringify(data),
+        url: "/item" ,
+        data: JSON.stringify(orderItemForm),
         dataType: "json",//预期服务器返回的数据类型
         success: function (result) {
             if (result.code == 0) {
                 dialogSuccessMsg("保存成功");
-                $('#orderInfoModal').modal('hide');
-                $('#tb_order').bootstrapTable('refresh');
+                $('#itemInfoModal').modal('hide');
+                $('#tb_item').bootstrapTable('refresh');
             }
         },
         error : function() {
-            dialogErrorMsg("保存订单信息异常");
-            $('#orderInfoModal').modal('hide');
+            dialogErrorMsg("保存商品信息异常");
+            $('#itemInfoModal').modal('hide');
         }
     });
 }
 
 //清除弹窗原数据
-$("#orderInfoModal").on("hidden.bs.modal", function() {
-    document.getElementById("orderForm").reset();
+$("#itemInfoModal").on("hidden.bs.modal", function() {
+    document.getElementById("orderItemForm").reset();
 })
 
-$('#deliveryDate').datetimepicker({
-    minView: "month",
-    language: 'zh-CN',
-    format: 'yyyy-mm-dd',
-    autoclose: true,
-    todayBtn: true,
-    pickerPosition: "bottom-left"
-});
 
 

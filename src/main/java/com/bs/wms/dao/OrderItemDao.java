@@ -2,6 +2,7 @@ package com.bs.wms.dao;
 
 import com.bs.wms.common.base.BaseDao;
 import com.bs.wms.entity.OrderItem;
+import com.bs.wms.query.OrderItemQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface OrderItemDao extends BaseDao<OrderItem> {
     int batchSave(List<OrderItem> orderItems);
 
     int deleteByOrderId(Long orderId);
+
+    List<OrderItem> listOrderItem(OrderItemQuery orderItemQuery);
 }

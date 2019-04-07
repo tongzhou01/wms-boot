@@ -249,4 +249,7 @@
         FROM order_info
         where id = #{orderId}
     </select>
+    <select id="selectMaxId" resultType="java.lang.Integer">
+        select max(id) from order_info
+    </select>
 </mapper>

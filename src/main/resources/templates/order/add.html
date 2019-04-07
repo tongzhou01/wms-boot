@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header::header('用户管理')"/>
+<body>
+<nav th:replace="include/top::top-nav"></nav>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="include/left::left-nav('order')"></div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h3 class="sub-header">订单管理</h3>
+            <div class="panel-body" style="padding-bottom:0px;">
+                <div class="panel panel-default">
+                    <div class="panel-heading">新增订单</div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" id="orderForm">
+                            <input type="hidden" name="id" id="id">
+                            <div class="form-group">
+                                <label for="orderName" class="col-sm-2 control-label">订单名称:</label>
+                                <div class="col-xs-4">
+                                    <input type="text" class="form-control" name="orderName" id="orderName">
+                                </div>
+                                <label for="companyName" class="col-xs-2 control-label">公司名称:</label>
+                                <div class="col-xs-4">
+                                    <input class="form-control" name="companyName" id="companyName"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerName" class="col-sm-2 control-label">顾客姓名:</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" name="customerName" id="customerName"/>
+                                </div>
+                                <label for="totalAmount" class="col-sm-2 control-label">总金额:</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" name="totalAmount" id="totalAmount"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="deliveryPerson" class="col-sm-2 control-label">送货人:</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" name="deliveryPerson" id="deliveryPerson"/>
+                                </div>
+                                <label for="deliveryAddress" class="col-sm-2 control-label">送货地址:</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" name="deliveryAddress" id="deliveryAddress"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="deliveryDate" class="col-sm-2 control-label">送货日期:</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control form_datetime" readonly name="deliveryDate"
+                                           id="deliveryDate"/>
+                                </div>
+                                <label for="signPerson" class="col-sm-2 control-label">签收人:</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" name="signPerson" id="signPerson"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="invoicePerson" class="col-sm-2 control-label">开票人:</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" name="invoicePerson" id="invoicePerson"/>
+                                </div>
+                                <label for="orderPhone" class="col-sm-2 control-label">订货电话:</label>
+                                <div class="col-sm-4">
+                                    <input class="form-control" name="signPerson" id="orderPhone"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="orderAddress" class="col-sm-2 control-label">订货地址:</label>
+                                <div class="col-sm-4">
+                                    <textarea class="form-control" name="invoicePerson" id="orderAddress"></textarea>
+                                </div>
+                                <label for="remake" class="col-sm-2 control-label">备注:</label>
+                                <div class="col-sm-4">
+                                    <textarea class="form-control" name="remake" id="remake"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                        <form class="form-horizontal" id="orderItemForm">
+                                <div class="bs-example" data-example-id="striped-table">
+                                    <table class="table table-striped" id="itemTable">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>商品名称</th>
+                                            <th>预定数量</th>
+                                            <th>配送数量</th>
+                                            <th>单价</th>
+                                            <th>金额</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                        <p>商品列表</p>
+                                    </table>
+                                    <button type="button" class="btn btn-primary" onclick="addItemList()">
+                                        添加商品
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default"
+                                        onclick="javascript:window.location.href = 'list'">返回
+                                </button>
+                                <button type="button" class="btn btn-default" onclick="saveOrder()">提交
+                                </button>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="orderItemModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="itemName" class="col-sm-2 control-label">商品名称:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="itemName">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="reserveNumber" class="col-sm-2 control-label">预定数量:</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="reserveNumber"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryNumber" class="col-sm-2 control-label">配送数量:</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="deliveryNumber"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="unitPrice" class="col-sm-2 control-label">单价:</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="unitPrice"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount" class="col-sm-2 control-label">金额:</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" id="amount"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="addItemToTable()">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include/footer::footer"></div>
+<script th:src="@{/static/js/order/add.js}"></script>
+</body>
+</html>

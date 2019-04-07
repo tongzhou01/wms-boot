@@ -4,7 +4,7 @@ function dialogMsg(msg, type) {
         heading: 'Note', // Optional heading to be shown on the toast
         icon: 'information', // Type of toast icon success error information
         showHideTransition: 'fade', // fade, slide or plain
-        allowToastClose: true, // Boolean value true or false
+        allowToastClose: false, // Boolean value true or false
         hideAfter: 3000, // false to make it sticky or number representing the miliseconds as time after which toast needs to be hidden
         stack: 5, // false if there should be only one toast at a time or a number representing the maximum number of toasts to be shown at a time
         position: 'bottom-left', // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values
@@ -54,6 +54,7 @@ $.fn.serializeObject = function()
     var a = this.serializeArray();
     $.each(a, function() {
         if (o[this.name]) {
+            console.log(o[this.name].push);
             if (!o[this.name].push) {
                 o[this.name] = [o[this.name]];
             }
@@ -63,4 +64,4 @@ $.fn.serializeObject = function()
         }
     });
     return o;
-};  　　
+};
