@@ -101,4 +101,14 @@ public class OrderController {
     public R sendMail(@RequestBody SendEmailDTO sendEmailDTO) {
         return orderInfoService.sendMail(sendEmailDTO);
     }
+
+    /**
+     * 获取月度统计
+     * @return
+     */
+    @GetMapping("/count")
+    public R getCount() {
+        return orderInfoService.getCount();
+    }
+
 }

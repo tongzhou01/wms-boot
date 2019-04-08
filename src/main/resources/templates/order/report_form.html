@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/header::header('用户管理')"/>
+<body>
+<nav th:replace="include/top::top-nav"></nav>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="include/left::left-nav('order')"></div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h3 class="sub-header">每月报表</h3>
+            <div class="panel-body" style="padding-bottom:0px;">
+                <div id="reportForm" class="row" style="width: 1000px;height:600px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include/footer::footer"></div>
+<script th:src="@{/static/js/order/report_form.js}"></script>
+</body>
+</html>

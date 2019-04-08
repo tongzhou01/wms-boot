@@ -51,4 +51,10 @@ public interface OrderInfoService {
      * @return
      */
     R sendMail(SendEmailDTO sendEmailDTO);
+
+    /**
+     * 统计
+     * @return
+     */
+    R getCount();
 }

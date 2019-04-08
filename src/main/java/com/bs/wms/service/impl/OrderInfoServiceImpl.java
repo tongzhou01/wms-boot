@@ -1,5 +1,6 @@
 package com.bs.wms.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.bs.wms.common.entity.Page;
 import com.bs.wms.common.entity.R;
 import com.bs.wms.dao.OrderInfoDao;
@@ -11,11 +12,14 @@ import com.bs.wms.entity.OrderItem;
 import com.bs.wms.query.OrderInfoQuery;
 import com.bs.wms.service.OrderInfoService;
 import com.bs.wms.util.DateUtil;
+import com.bs.wms.vo.CountDataVO;
+import com.bs.wms.vo.CountVO;
 import com.bs.wms.vo.OrderInfoVO;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -106,6 +110,32 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     @Override
     public R sendMail(SendEmailDTO sendEmailDTO) {
 //        MailUtil.sendMail();
+        return null;
+    }
+
+    @Override
+    public R getCount() {
+        List<CountVO> countVOList = orderInfoDao.getCount();
+        Integer[] countArr = new Integer[12];
+        List<CountDataVO> list = new ArrayList<>();
+        CountDataVO countDataVO = new CountDataVO();;
+        for (int i = 0; i < countArr.length; i++) {
+            countArr[i] = 0;
+        }
+
+
+
+        for (CountVO countVO : countVOList) {
+            if (countVO.getCompanyName() != null) {// 公司名称不为空
+                if (countVO.getCompanyName().equals(countDataVO.getName())) { // 公司名称已存在
+
+                } else {
+                    countDataVO = new CountDataVO();
+                    countDataVO.setName(countVO.getCompanyName());
+                }
+            }
+        }
+        System.out.println(JSON.toJSON(countArr));
         return null;
     }
 }

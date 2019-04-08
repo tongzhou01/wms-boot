@@ -21,7 +21,8 @@
         <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
     <resultMap id="OrderVOResultMap" type="com.bs.wms.vo.OrderInfoVO" extends="BaseResultMap">
-        <collection column="{orderId=id}" select="com.bs.wms.dao.OrderItemDao.selectItemByOrderId" property="orderItems" ofType="com.bs.wms.entity.OrderItem"/>
+        <collection column="{orderId=id}" select="com.bs.wms.dao.OrderItemDao.selectItemByOrderId" property="orderItems"
+                    ofType="com.bs.wms.entity.OrderItem"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, order_no, order_name, order_phone, order_address, company_name, customer_name, 
@@ -251,5 +252,17 @@
     </select>
     <select id="selectMaxId" resultType="java.lang.Integer">
         select max(id) from order_info
+    </select>
+    <select id="getCount" resultType="com.bs.wms.vo.CountVO">
+      SELECT
+	      company_name companyName,
+          YEAR (create_time) `year`,
+          MONTH (create_time) `month`,
+          SUM(total_amount) totalAmount
+      FROM
+	    order_info
+	  WHERE create_time > date_format(DATE_SUB(CURDATE(), INTERVAL 11 MONTH),'%Y-%m-01')
+      GROUP BY company_name,`year`,`month`
+      ORDER BY companyName,`year`,`month`
     </select>
 </mapper>
