@@ -54,7 +54,7 @@ var TableInit = function () {
             }, {
                 field: 'id',
                 title: '操作',
-                width: 120,
+                // width: 150,
                 align: 'center',
                 valign: 'middle',
                 formatter: actionFormatter
@@ -77,8 +77,10 @@ var TableInit = function () {
 function actionFormatter(value, row, index) {
     var id = value;
     var result = "";
-    result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"showItem('" + id + "')\" title='商品列表'><span class='glyphicon glyphicon-search'></span></a>";
-    result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"showData('" + id + "')\" title='查看'><span class='glyphicon glyphicon-search'></span></a>";
+    result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"showItem('" + id + "')\" title='商品列表'><span class='glyphicon glyphicon-list-alt'></span></a>";
+    result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"showData('" + id + "')\" title='导出Excel'><span class='glyphicon glyphicon-download-alt'></span></a>";
+    result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"showData('" + id + "')\" title='预览'><span class='glyphicon glyphicon-search'></span></a>";
+    result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"printOrder('" + id + "')\" title='打印'><span class='glyphicon glyphicon-print'></span></a>";
     result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"editData('" + id + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
     result += "<a href='javascript:;' class='btn btn-xs red' onclick=\"delData('" + id + "')\" title='删除'><span class='glyphicon glyphicon-remove'></span></a>";
     return result;
@@ -124,7 +126,10 @@ function addData() {
     $('#submit').hide();
 }*/
 function showData(id) {
-    window.open("/view/order/detail");
+    window.open("/order/print/" + id);
+}
+function printOrder(id) {
+    window.open("/order/print/" + id).print();
 }
 
 function editData(id) {

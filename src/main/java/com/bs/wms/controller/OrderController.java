@@ -2,13 +2,20 @@ package com.bs.wms.controller;
 
 import com.bs.wms.common.entity.Page;
 import com.bs.wms.common.entity.R;
-import com.bs.wms.dto.SaveOrderDto;
+import com.bs.wms.constant.MsgConstant;
+import com.bs.wms.dto.SaveOrderDTO;
+import com.bs.wms.dto.SendEmailDTO;
 import com.bs.wms.query.OrderInfoQuery;
 import com.bs.wms.service.OrderInfoService;
 import com.bs.wms.vo.OrderInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+/**
+ * @RestController 控制器，默认返回json数据
+ * @RequestMapping url映射
+ */
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -30,12 +37,12 @@ public class OrderController {
     /**
      * 创建订单
      *
-     * @param saveOrderDto
+     * @param saveOrderDTO
      * @return
      */
     @PostMapping
-    public R saveOrder(@RequestBody SaveOrderDto saveOrderDto) {
-        return orderInfoService.saveOrder(saveOrderDto);
+    public R saveOrder(@RequestBody SaveOrderDTO saveOrderDTO) {
+        return orderInfoService.saveOrder(saveOrderDTO);
     }
 
     /**
@@ -52,12 +59,12 @@ public class OrderController {
     /**
      * 更新订单信息
      *
-     * @param saveOrderDto
+     * @param saveOrderDTO
      * @return
      */
     @PutMapping
-    public R updateOrder(@RequestBody SaveOrderDto saveOrderDto) {
-        return orderInfoService.updateOrder(saveOrderDto);
+    public R updateOrder(@RequestBody SaveOrderDTO saveOrderDTO) {
+        return orderInfoService.updateOrder(saveOrderDTO);
     }
 
     /**
@@ -71,4 +78,27 @@ public class OrderController {
         return orderInfoService.deleteOrder(id);
     }
 
+    /**
+     * 打印订单
+     *
+     * @param modelAndView
+     * @return
+     */
+    @GetMapping("/print/{id}")
+    public ModelAndView print(ModelAndView modelAndView, @PathVariable Long id) {
+        R order = orderInfoService.getOrder(id);
+        modelAndView.addObject(MsgConstant.DATA, (OrderInfoVO)order.get(MsgConstant.DATA));
+        modelAndView.setViewName("order/detail");
+        return modelAndView;
+    }
+
+    /**
+     * 发送邮件
+     * id 订单ID
+     * @return
+     */
+    @PostMapping("/mail")
+    public R sendMail(@RequestBody SendEmailDTO sendEmailDTO) {
+        return orderInfoService.sendMail(sendEmailDTO);
+    }
 }

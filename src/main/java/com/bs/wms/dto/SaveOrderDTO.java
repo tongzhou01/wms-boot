@@ -5,7 +5,7 @@ import com.bs.wms.entity.OrderItem;
 
 import java.util.List;
 
-public class SaveOrderDto {
+public class SaveOrderDTO {
 
     private OrderInfo orderInfo;
 

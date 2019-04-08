@@ -2,7 +2,8 @@ package com.bs.wms.service;
 
 import com.bs.wms.common.entity.Page;
 import com.bs.wms.common.entity.R;
-import com.bs.wms.dto.SaveOrderDto;
+import com.bs.wms.dto.SaveOrderDTO;
+import com.bs.wms.dto.SendEmailDTO;
 import com.bs.wms.query.OrderInfoQuery;
 import com.bs.wms.vo.OrderInfoVO;
 
@@ -18,10 +19,10 @@ public interface OrderInfoService {
 
     /**
      * 新增订单
-     * @param saveOrderDto
+     * @param saveOrderDTO
      * @return
      */
-    R saveOrder(SaveOrderDto saveOrderDto);
+    R saveOrder(SaveOrderDTO saveOrderDTO);
 
     /**
      * 查询订单详情
@@ -32,10 +33,22 @@ public interface OrderInfoService {
 
     /**
      * 更新订单信息
-     * @param saveOrderDto
+     * @param saveOrderDTO
      * @return
      */
-    R updateOrder(SaveOrderDto saveOrderDto);
+    R updateOrder(SaveOrderDTO saveOrderDTO);
 
+    /**
+     * 删除订单
+     * @param id
+     * @return
+     */
     R deleteOrder(Long id);
+
+    /**
+     * 发送邮件
+     * @param sendEmailDTO
+     * @return
+     */
+    R sendMail(SendEmailDTO sendEmailDTO);
 }

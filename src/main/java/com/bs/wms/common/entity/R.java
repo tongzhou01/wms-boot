@@ -44,7 +44,7 @@ public class R extends HashMap<String, Object> {
         if (data == null) {
             return R.error(MsgConstant.DATA_IS_NULL);
         }
-        return R.ok().put("data", data);
+        return R.ok().put(MsgConstant.DATA, data);
     }
 
     public static R ok() {

@@ -4,7 +4,8 @@ import com.bs.wms.common.entity.Page;
 import com.bs.wms.common.entity.R;
 import com.bs.wms.dao.OrderInfoDao;
 import com.bs.wms.dao.OrderItemDao;
-import com.bs.wms.dto.SaveOrderDto;
+import com.bs.wms.dto.SaveOrderDTO;
+import com.bs.wms.dto.SendEmailDTO;
 import com.bs.wms.entity.OrderInfo;
 import com.bs.wms.entity.OrderItem;
 import com.bs.wms.query.OrderInfoQuery;
@@ -37,9 +38,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public R saveOrder(SaveOrderDto saveOrderDto) {
-        List<OrderItem> orderItems = saveOrderDto.getOrderItems();
-        OrderInfo orderInfo = saveOrderDto.getOrderInfo();
+    public R saveOrder(SaveOrderDTO saveOrderDTO) {
+        List<OrderItem> orderItems = saveOrderDTO.getOrderItems();
+        OrderInfo orderInfo = saveOrderDTO.getOrderInfo();
         try {
             // 新增订单信息
             Integer maxId = orderInfoDao.selectMaxId();
@@ -69,9 +70,9 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public R updateOrder(SaveOrderDto saveOrderDto) {
-        OrderInfo orderInfo = saveOrderDto.getOrderInfo();
-        List<OrderItem> orderItems = saveOrderDto.getOrderItems();
+    public R updateOrder(SaveOrderDTO saveOrderDTO) {
+        OrderInfo orderInfo = saveOrderDTO.getOrderInfo();
+        List<OrderItem> orderItems = saveOrderDTO.getOrderItems();
         try {
             // 更新订单信息
             orderInfo.setModifyTime(new Date());
@@ -100,5 +101,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             return R.error();
         }
         return R.ok();
+    }
+
+    @Override
+    public R sendMail(SendEmailDTO sendEmailDTO) {
+        return null;
     }
 }

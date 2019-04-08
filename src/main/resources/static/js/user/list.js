@@ -43,6 +43,9 @@ var TableInit = function () {
                 field: 'realName',
                 title: '真实姓名'
             }, {
+                field: 'password',
+                title: '密码'
+            }, {
                 field: 'email',
                 title: '邮件'
             }, {
