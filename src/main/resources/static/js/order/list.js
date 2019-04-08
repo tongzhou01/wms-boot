@@ -52,6 +52,9 @@ var TableInit = function () {
                 field: 'totalAmount',
                 title: '总金额'
             }, {
+                field: 'createTime',
+                title: '创建时间'
+            }, {
                 field: 'id',
                 title: '操作',
                 // width: 150,
@@ -78,10 +81,10 @@ function actionFormatter(value, row, index) {
     var id = value;
     var result = "";
     result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"showItem('" + id + "')\" title='商品列表'><span class='glyphicon glyphicon-list-alt'></span></a>";
-    result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"showData('" + id + "')\" title='导出Excel'><span class='glyphicon glyphicon-download-alt'></span></a>";
-    result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"showData('" + id + "')\" title='预览'><span class='glyphicon glyphicon-search'></span></a>";
-    result += "<a href='javascript:;' class='btn btn-xs green' onclick=\"printOrder('" + id + "')\" title='打印'><span class='glyphicon glyphicon-print'></span></a>";
-    result += "<a href='javascript:;' class='btn btn-xs blue' onclick=\"editData('" + id + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
+    result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"showData('" + id + "')\" title='导出Excel'><span class='glyphicon glyphicon-download-alt'></span></a>";
+    result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"showData('" + id + "')\" title='预览'><span class='glyphicon glyphicon-search'></span></a>";
+    result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"printOrder('" + id + "')\" title='打印'><span class='glyphicon glyphicon-print'></span></a>";
+    result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"editData('" + id + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
     result += "<a href='javascript:;' class='btn btn-xs red' onclick=\"delData('" + id + "')\" title='删除'><span class='glyphicon glyphicon-remove'></span></a>";
     return result;
 }
@@ -117,6 +120,10 @@ function addData() {
     $('#orderInfoModal').modal('show');
     $('#myModalLabel').text('新增');
     $('#submit').show().off("click").on('click', saveOrder);
+}
+
+function addData2() {
+    window.location.href = "add";
 }
 
 /*function showData(id) {

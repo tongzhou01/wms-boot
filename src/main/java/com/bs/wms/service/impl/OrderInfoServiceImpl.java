@@ -105,6 +105,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public R sendMail(SendEmailDTO sendEmailDTO) {
+//        MailUtil.sendMail();
         return null;
     }
 }

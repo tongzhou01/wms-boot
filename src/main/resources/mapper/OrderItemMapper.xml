@@ -172,8 +172,7 @@
 
     <insert id="batchSave">
         insert into order_item
-        (id,
-        order_id,
+        (order_id,
         spec_id,
         item_name,
         reserve_number,
@@ -185,15 +184,14 @@
         modify_time)
         values
         <foreach collection="orderItems" item="item" separator=",">
-            (#{id,jdbcType=BIGINT},
-            #{orderId,jdbcType=BIGINT},
-            #{specId,jdbcType=BIGINT},
-            #{itemName,jdbcType=VARCHAR},
-            #{reserveNumber,jdbcType=INTEGER},
-            #{deliveryNumber,jdbcType=INTEGER},
-            #{unitPrice,jdbcType=DECIMAL},
-            #{amount,jdbcType=DECIMAL},
-            #{remark,jdbcType=VARCHAR},
+            (#{item.orderId,jdbcType=BIGINT},
+            #{item.specId,jdbcType=BIGINT},
+            #{item.itemName,jdbcType=VARCHAR},
+            #{item.reserveNumber,jdbcType=INTEGER},
+            #{item.deliveryNumber,jdbcType=INTEGER},
+            #{item.unitPrice,jdbcType=DECIMAL},
+            #{item.amount,jdbcType=DECIMAL},
+            #{item.remark,jdbcType=VARCHAR},
             now(),
             now())
         </foreach>

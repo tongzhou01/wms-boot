@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import javax.mail.internet.MimeMessage;
+import java.io.File;
 import java.util.Properties;
 
 public class MailUtil {
@@ -17,7 +18,6 @@ public class MailUtil {
 
     /**
      * 邮件发送器
-     *
      */
     private static JavaMailSenderImpl createMailSender() {
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
@@ -40,8 +40,9 @@ public class MailUtil {
      * @param to      接受人
      * @param subject 主题
      * @param html    发送内容
+     * @param file    附件
      */
-    public static boolean sendMail(String to, String subject, String html){
+    public static boolean sendMail(String to, String subject, String html, File file) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper messageHelper;
         boolean b = false;
@@ -51,6 +52,7 @@ public class MailUtil {
             messageHelper.setTo(to);
             messageHelper.setSubject(subject);
             messageHelper.setText(html, true);
+            messageHelper.addAttachment("txtFile", new File("E:\\1.txt"));
             mailSender.send(mimeMessage);
             LOGGER.info("成功发送邮件到 - " + to);
             b = true;
@@ -63,11 +65,11 @@ public class MailUtil {
     /**
      * 发送邮件
      *
-     * @param emailArray      接受人
-     * @param subject 主题
-     * @param html    发送内容
+     * @param emailArray 接受人
+     * @param subject    主题
+     * @param html       发送内容
      */
-    public static boolean sendMail(String[] emailArray, String subject, String html){
+    public static boolean sendMail(String[] emailArray, String subject, String html) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper messageHelper;
         boolean b = false;
@@ -87,7 +89,7 @@ public class MailUtil {
     }
 
     public static void main(String[] args) {
-        sendMail("tz568309196@163.com","haha","<html>\n" +
+        sendMail("tz568309196@163.com", "haha", "<html>\n" +
                 "<head>\n" +
                 "<title>\n" +
                 "我是网页标题\n" +
@@ -96,6 +98,6 @@ public class MailUtil {
                 "<body>\n" +
                 "<h1>我是网页内容，够简单了吧？</h1>\n" +
                 "</body>\n" +
-                "</html>");
+                "</html>", null);
     }
 }

@@ -14,12 +14,17 @@ function addItemToTable() {
         + addTd('deliveryNumber', deliveryNumber, length)
         + addTd('unitPrice', unitPrice, length)
         + addTd('amount', amount, length)
+        + '<td><a href="javascript:;" class="btn btn-xs red" onclick="delTd(this)" title="删除"><span class="glyphicon glyphicon-remove"></span></td></tr>'
     );
     $('#orderItemModal').modal('hide');
 }
 
+function delTd(obj) {
+    $(obj).parent().parent().remove();
+}
+
 function addTd(name, val, length) {
-    return '<td><input type="hidden" name="orderItems[' + (length - 1) + '].' + name + '" value="' + val + '"/>' + val + '</td>';
+    return '<td><input type="hidden" name="' + name + '" value="' + val + '"/>' + val + '</td>';
 }
 
 /**
@@ -39,36 +44,9 @@ $("#orderItemModal").on("hidden.bs.modal", function () {
 })
 
 function saveOrder() {
-    var orderForm = $('#orderForm').serializeObject();
-    // var orderItemFormArray = $('#orderItemForm').serializeArray();
-    // console.log(orderItemFormArray);
-    var jsonArray = [];
-    var nameArray1 = [];
-    /*$.each(orderItemFormArray, function () {
-        var nameArray = this.name.split(".");//orderItems[0].itemName
-        if (nameArray1.indexOf(nameArray[0]) == -1) {
-            nameArray1.push(nameArray[0]);
-        }
-    })
-    $.each(orderItemFormArray, function () {
-        var nameArray = this.name.split(".");//orderItems[0].itemName
-        o[nameArray[1]] = this.value || '';// o = {"itemName":"1"}
-        $.each(nameArray1, function () {
-            var o = {};
-
-        })
-        if (o[this.name]) {
-            console.log(o[this.name].push);
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
-    })*/
-    // var orderItemForm = $('#orderItemForm').serializeObject();
-    var data = {"orderInfo": orderForm, "orderItems": []};
+    var orderJson = $('#orderForm').serializeObject();
+    var orderItemJson = jsonConvert($('#orderItemForm').serializeObject());
+    var data = {"orderInfo": orderJson, "orderItems": orderItemJson};
     $.ajax({
         contentType:"application/json",
         type: "POST",// 新增请求
@@ -85,6 +63,28 @@ function saveOrder() {
             dialogErrorMsg("保存订单信息异常");
         }
     });
+}
+
+function jsonConvert(jsonData) {
+    var vCount = 0;
+    // 计算json内部的数组最大长度
+    for(var item in jsonData){
+        var tmp = $.isArray(jsonData[item]) ? jsonData[item].length : 1;
+        vCount = (tmp > vCount) ? tmp : vCount;
+    }
+    if(vCount > 1) {
+        var jsonData2 = new Array();
+        for(var i = 0; i < vCount; i++){
+            var jsonObj = {};
+            for(var item in jsonData) {
+                jsonObj[item] = jsonData[item][i];
+            }
+            jsonData2.push(jsonObj);
+        }
+        return jsonData2;
+    }else{
+        return jsonData;
+    }
 }
 
 $('#deliveryDate').datetimepicker({
