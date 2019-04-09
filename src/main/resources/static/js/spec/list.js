@@ -174,7 +174,7 @@ function saveSpec() {
 }
 
 //清除弹窗原数据
-$("#specModal").on("hidden.bs.modal", function() {
+$("#specModal").on("hide.bs.modal", function() {
     document.getElementById("specForm").reset();
 })
 

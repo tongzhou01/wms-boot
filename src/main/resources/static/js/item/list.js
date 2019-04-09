@@ -185,7 +185,7 @@ function saveItem() {
 }
 
 //清除弹窗原数据
-$("#itemInfoModal").on("hidden.bs.modal", function() {
+$("#itemInfoModal").on("hide.bs.modal", function() {
     document.getElementById("orderItemForm").reset();
 })
 

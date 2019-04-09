@@ -43,9 +43,6 @@ var TableInit = function () {
                 field: 'realName',
                 title: '真实姓名'
             }, {
-                field: 'password',
-                title: '密码'
-            }, {
                 field: 'email',
                 title: '邮件'
             }, {
@@ -93,6 +90,7 @@ function getData(id) {
                 console.log(data);
                 $('#username').val(data.username);
                 $('#realName').val(data.realName);
+                $('#password').val(data.password);
                 $('#email').val(data.email);
                 $('#phone').val(data.phone);
                 $('#id').val(data.id);
@@ -107,6 +105,7 @@ function addData() {
     // window.location.href = "add";
     $('#userModal').modal('show');
     $('#myModalLabel').text('新增');
+    document.getElementById("userForm").reset();
     $('#submit').show().off("click").on('click', saveUser);
 }
 
@@ -141,53 +140,101 @@ function delData(id) {
 }
 
 function updateUser() {
-    var userForm = $('#userForm').serializeObject();
-    $.ajax({
-        contentType:"application/json",
-        type: "PUT",// 更新请求
-        url: "/user" ,
-        data: JSON.stringify(userForm),
-        dataType: "json",//预期服务器返回的数据类型
-        success: function (result) {
-            if (result.code == 0) {
-                dialogSuccessMsg("保存成功");
+    var $userForm = $('#userForm');
+    var userForm = $userForm.serializeObject();
+    if (doValidate($userForm)) {
+        $.ajax({
+            contentType: "application/json",
+            type: "PUT",// 更新请求
+            url: "/user",
+            data: JSON.stringify(userForm),
+            dataType: "json",//预期服务器返回的数据类型
+            success: function (result) {
+                if (result.code == 0) {
+                    dialogSuccessMsg("保存成功");
+                    $('#userModal').modal('hide');
+                    $('#tb_user').bootstrapTable('refresh');
+                }
+            },
+            error: function () {
+                dialogErrorMsg("更新用户信息异常");
                 $('#userModal').modal('hide');
-                $('#tb_user').bootstrapTable('refresh');
             }
-        },
-        error : function() {
-            dialogErrorMsg("更新用户信息异常");
-            $('#userModal').modal('hide');
-        }
-    });
+        });
+    }
 }
 
 function saveUser() {
-    var userForm = $('#userForm').serializeObject();
-    $.ajax({
-        contentType:"application/json",
-        type: "POST",// 新增请求
-        url: "/user" ,
-        data: JSON.stringify(userForm),
-        dataType: "json",//预期服务器返回的数据类型
-        success: function (result) {
-            if (result.code == 0) {
-                dialogSuccessMsg("保存成功");
+    var $userForm = $('#userForm');
+    var userForm = $userForm.serializeObject();
+    if (doValidate($userForm)) {
+        $.ajax({
+            contentType:"application/json",
+            type: "POST",// 新增请求
+            url: "/user" ,
+            data: JSON.stringify(userForm),
+            dataType: "json",//预期服务器返回的数据类型
+            success: function (result) {
+                if (result.code == 0) {
+                    dialogSuccessMsg("保存成功");
+                    $('#userModal').modal('hide');
+                    $('#tb_user').bootstrapTable('refresh');
+                }
+            },
+            error : function() {
+                dialogErrorMsg("保存用户信息异常");
                 $('#userModal').modal('hide');
-                $('#tb_user').bootstrapTable('refresh');
             }
-        },
-        error : function() {
-            dialogErrorMsg("保存用户信息异常");
-            $('#userModal').modal('hide');
-        }
-    });
+        });
+    }
 }
 
 //清除弹窗原数据
-$("#userModal").on("hidden.bs.modal", function() {
+$("#userModal").on("hide.bs.modal", function() {
     document.getElementById("userForm").reset();
+    $('#userForm').data("bootstrapValidator").resetForm();
 })
 
 
-
+$(function () {
+    $('#userForm').bootstrapValidator({
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            username: {
+                message: '用户名验证失败',
+                validators: {
+                    notEmpty: {
+                        message: '用户名不能为空'
+                    }
+                }
+            },
+            password: {
+                message: '密码验证失败',
+                validators: {
+                    notEmpty: {
+                        message: '密码不能为空'
+                    }
+                }
+            },
+            email: {
+                validators: {
+                    notEmpty: {
+                        message: '邮箱地址不能为空'
+                    }
+                }
+            },
+            realName: {
+                validators: {
+                    notEmpty: {
+                        message: '真实姓名不能为空'
+                    }
+                }
+            }
+        }
+    });
+});

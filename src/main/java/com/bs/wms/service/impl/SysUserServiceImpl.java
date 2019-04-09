@@ -52,6 +52,7 @@ public class SysUserServiceImpl implements SysUserService {
     public R updateSysUser(SysUser sysUser) {
         try {
             // 更新用户信息
+            sysUser.setPassword(MD5Util.MD5Encode(sysUser.getPassword()));
             sysUser.setModifyTime(new Date());
             sysUserDao.updateByPrimaryKeySelective(sysUser);
         } catch (Exception e) {

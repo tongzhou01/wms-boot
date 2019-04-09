@@ -66,4 +66,18 @@ $.fn.serializeObject = function()
     return o;
 };
 
-// $('.datepicker').datepicker('setDate', new Date());
+//手动触发验证
+function doValidate(form) {
+    var bootstrapValidator = form.data('bootstrapValidator');
+    bootstrapValidator.validate();
+    if(bootstrapValidator.isValid()){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+// 重置验证
+function resetValidate(from) {
+    from.data("bootstrapValidator").resetForm();
+}

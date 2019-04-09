@@ -205,6 +205,7 @@ function saveOrder() {
                 dialogSuccessMsg("保存成功");
                 $('#orderInfoModal').modal('hide');
                 $('#tb_order').bootstrapTable('refresh');
+                document.getElementById("orderForm").reset();
             }
         },
         error : function() {
@@ -215,7 +216,7 @@ function saveOrder() {
 }
 
 //清除弹窗原数据
-$("#orderInfoModal").on("hidden.bs.modal", function() {
+$("#orderInfoModal").on("hide.bs.modal", function() {
     document.getElementById("orderForm").reset();
 })
 
@@ -227,5 +228,4 @@ $('#deliveryDate').datetimepicker({
     todayBtn: true,
     pickerPosition: "bottom-left"
 });
-
 

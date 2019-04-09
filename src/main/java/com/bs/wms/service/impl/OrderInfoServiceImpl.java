@@ -52,10 +52,13 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             if (maxId == null) {
                 maxId = 1;
             }
-            String orderNo = DateUtil.getCurrentTimeByDay().replace("-", "").concat(Integer.toString(maxId + 10001));
+            String orderNo = DateUtil.getCurrentTimeByDay().replace("-", "").concat(Integer.toString(maxId + 10001));// 生成订单号
             orderInfo.setOrderNo(orderNo);
             orderInfo.setCreateTime(new Date());
             orderInfo.setModifyTime(new Date());
+            // 计算商品总价
+            BigDecimal totalAmount = orderItems.stream().map(OrderItem::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+            orderInfo.setTotalAmount(totalAmount);
             orderInfoDao.insertSelective(orderInfo);
             Long orderId = orderInfo.getId();
             if (orderId != null && orderItems != null && orderItems.size() > 0) {
