@@ -1,12 +1,14 @@
 package com.bs.wms.vo;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 public class CountDataVO {
 
     private String name;
 
-    private List<Integer> data;
+    private BigDecimal[] data;
+
+    private String type;
 
     public String getName() {
         return name;
@@ -16,11 +18,19 @@ public class CountDataVO {
         this.name = name;
     }
 
-    public List<Integer> getData() {
+    public BigDecimal[] getData() {
         return data;
     }
 
-    public void setData(List<Integer> data) {
+    public void setData(BigDecimal[] data) {
         this.data = data;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

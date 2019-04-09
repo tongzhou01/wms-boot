@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:include="include/header::header('用户管理')"/>
+<head th:include="include/header::header('统计报表')"/>
 <body>
 <nav th:replace="include/top::top-nav"></nav>
 <div class="container-fluid">
     <div class="row">
-        <div th:replace="include/left::left-nav('order')"></div>
+        <div th:replace="include/left::left-nav('report')"></div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h3 class="sub-header">每月报表</h3>
-            <div class="panel-body" style="padding-bottom:0px;">
-                <div id="reportForm" class="row" style="width: 1000px;height:600px;"></div>
+            <h4 class="sub-header">每月报表</h4>
+            <div class="panel-body row" style="padding-bottom:0px;">
+                <div class="row">
+                    <div class="form-group col-sm-2">
+                        <label for="yearDay" class="control-label">选择月份：</label>
+                        <input class="form-control form_datetime" id="yearDay" type="text" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="reportForm" class="row" style="width: 1100px;height:650px;"></div>
+                </div>
             </div>
         </div>
     </div>

@@ -18,5 +18,5 @@ public interface OrderInfoDao extends BaseDao<OrderInfo> {
 
     Integer selectMaxId();
 
-    List<CountVO> getCount();
+    List<CountVO> getCount(String yearDay);
 }

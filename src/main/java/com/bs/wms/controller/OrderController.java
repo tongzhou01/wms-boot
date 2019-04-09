@@ -106,9 +106,9 @@ public class OrderController {
      * 获取月度统计
      * @return
      */
-    @GetMapping("/count")
-    public R getCount() {
-        return orderInfoService.getCount();
+    @GetMapping("/count/{year}/{day}")
+    public R getCount(@PathVariable Integer year, @PathVariable Integer day) {
+        return orderInfoService.getCount(year, day);
     }
 
 }

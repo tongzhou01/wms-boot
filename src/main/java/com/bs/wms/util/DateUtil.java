@@ -2,6 +2,7 @@ package com.bs.wms.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
@@ -56,9 +57,9 @@ public class DateUtil {
      * @param give String 给定的时间格式
      * @return String
      */
-    public static String getCurrentTime(String give) {
+    public static String getCurrentTime(String give, Date date) {
         SimpleDateFormat temp = new SimpleDateFormat(give);
-        return temp.format(new Date(System.currentTimeMillis()));
+        return temp.format(date);
     }
 
     // ****************************String转换为Date****************************
@@ -193,5 +194,57 @@ public class DateUtil {
      */
     public static long getCurrentTimestampMs() {
         return System.currentTimeMillis();
+    }
+
+    /**
+     * 获取下个月
+     * @param date
+     * @param m
+     * @return
+     */
+    public static Date getNextMonth(Date date, int m) {
+        Calendar calendar  =   Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MONTH, m);
+        return calendar.getTime();
+    }
+
+
+    /**
+     * 获取日期是哪一天
+     * @param date
+     * @return
+     */
+    public static int getDay(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return day;
+    }
+
+    /**
+     * 获取当月的 天数
+     */
+    public static int getCurrentMonthDay()
+    {
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.DATE, 1);
+        a.roll(Calendar.DATE, -1);
+        int maxDate = a.get(Calendar.DATE);
+        return maxDate;
+    }
+
+    /**
+     * 根据 年、月 获取对应的月份 的 天数
+     */
+    public static int getDaysByYearMonth(int year, int month)
+    {
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.YEAR, year);
+        a.set(Calendar.MONTH, month - 1);
+        a.set(Calendar.DATE, 1);
+        a.roll(Calendar.DATE, -1);
+        int maxDate = a.get(Calendar.DATE);
+        return maxDate;
     }
 }

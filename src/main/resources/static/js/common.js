@@ -65,3 +65,5 @@ $.fn.serializeObject = function()
     });
     return o;
 };
+
+// $('.datepicker').datepicker('setDate', new Date());

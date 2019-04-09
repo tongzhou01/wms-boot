@@ -255,14 +255,13 @@
     </select>
     <select id="getCount" resultType="com.bs.wms.vo.CountVO">
       SELECT
-	      company_name companyName,
-          YEAR (create_time) `year`,
-          MONTH (create_time) `month`,
-          SUM(total_amount) totalAmount
+        company_name companyName,
+        SUM(total_amount) totalAmount,
+        DAY(create_time) `day`
       FROM
 	    order_info
-	  WHERE create_time > date_format(DATE_SUB(CURDATE(), INTERVAL 11 MONTH),'%Y-%m-01')
-      GROUP BY company_name,`year`,`month`
-      ORDER BY companyName,`year`,`month`
+	  WHERE date_format(create_time,'%Y-%m') = #{yearDay}
+      GROUP BY company_name,`day`
+      ORDER BY companyName
     </select>
 </mapper>

@@ -41,4 +41,14 @@ public class BaseConstant {
      * 端口号
      */
     public static final Integer EMAIL_PORT = 465;
+
+    /**
+     * 日期格式化
+     */
+    public static final String YEAR_DAY_FORMAT = "yyyy-MM";
+
+    /**
+     * 图表类型
+     */
+    public static final String LINE_TYPE = "line";
 }

@@ -56,5 +56,5 @@ public interface OrderInfoService {
      * 统计
      * @return
      */
-    R getCount();
+    R getCount(Integer year, Integer day);
 }
