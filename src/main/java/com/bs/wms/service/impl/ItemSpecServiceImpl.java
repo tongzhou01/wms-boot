@@ -22,8 +22,13 @@ public class ItemSpecServiceImpl implements ItemSpecService {
     @Override
     public Page<ItemSpec> listItemSpec(ItemSpecQuery itemSpecQuery) {
         Page<ItemSpec> page = new Page<>();
-        PageHelper.startPage(itemSpecQuery.getPageNum(), itemSpecQuery.getPageSize());//分页
-        List<ItemSpec> itemSpecList = itemSpecDao.listItemSpec(itemSpecQuery);// 查询商品规格列表
+        List<ItemSpec> itemSpecList;
+        if (itemSpecQuery.getPageNum() == null || itemSpecQuery.getPageSize() == null) {
+            itemSpecList = itemSpecDao.listItemSpec(itemSpecQuery);// 查询商品规格列表
+        } else {
+            PageHelper.startPage(itemSpecQuery.getPageNum(), itemSpecQuery.getPageSize());//分页
+            itemSpecList = itemSpecDao.listItemSpec(itemSpecQuery);// 查询商品规格列表
+        }
         page.setRows(itemSpecList);
         return page;
     }

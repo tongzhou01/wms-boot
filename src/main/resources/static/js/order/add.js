@@ -4,7 +4,8 @@
 function addItemToTable() {
     var $itemModalForm = $('#itemModalForm');
     if (doValidate($itemModalForm)) {
-        var itemName = $('#itemName').val();
+        var itemName = $('#specId option:selected').text();
+        var specId = $('#specId option:selected').val();
         var reserveNumber = $('#reserveNumber').val();
         var deliveryNumber = $('#deliveryNumber').val();
         var unitPrice = $('#unitPrice').val();
@@ -12,6 +13,7 @@ function addItemToTable() {
         var length = $("#itemTable").find("tr").length;
         $("#itemTable").find("tbody").append('<tr><th scope="row">' + length + '</th>'
             + addTd('itemName', itemName, length)
+            + addTd('specId', specId, length)
             + addTd('reserveNumber', reserveNumber, length)
             + addTd('deliveryNumber', deliveryNumber, length)
             + addTd('unitPrice', unitPrice, length)
@@ -27,6 +29,9 @@ function delTd(obj) {
 }
 
 function addTd(name, val, length) {
+    if(name == 'specId') {
+        return '<input type="hidden" name="' + name + '" value="' + val + '"/>';
+    }
     return '<td><input type="hidden" name="' + name + '" value="' + val + '"/>' + val + '</td>';
 }
 
@@ -62,6 +67,9 @@ function saveOrder() {
             success: function (result) {
                 if (result.code == 0) {
                     // location.reload();
+                    formReset('orderForm');// 清空表单
+                    delTBody('itemBody');// 清空table
+                    resetValidate($orderForm);
                     dialogSuccessMsg("保存成功");
                 }
             },
@@ -79,19 +87,15 @@ function jsonConvert(jsonData) {
         var tmp = $.isArray(jsonData[item]) ? jsonData[item].length : 1;
         vCount = (tmp > vCount) ? tmp : vCount;
     }
-    if(vCount > 1) {
-        var jsonData2 = new Array();
-        for(var i = 0; i < vCount; i++){
-            var jsonObj = {};
-            for(var item in jsonData) {
-                jsonObj[item] = jsonData[item][i];
-            }
-            jsonData2.push(jsonObj);
+    var jsonData2 = new Array();
+    for(var i = 0; i < vCount; i++){
+        var jsonObj = {};
+        for(var item in jsonData) {
+            jsonObj[item] = jsonData[item][i];
         }
-        return jsonData2;
-    }else{
-        return jsonData;
+        jsonData2.push(jsonObj);
     }
+    return jsonData2;
 }
 
 $('#deliveryDate').datetimepicker({
@@ -232,3 +236,22 @@ $(function () {
         }
     });
 });
+//初始化下拉菜单
+$(function () {
+    $.ajax({
+        type: "GET",
+        url: "/spec" ,
+        dataType: "json",//预期服务器返回的数据类型
+        success: function (result) {
+            var rows = result.rows;
+            var option = '';
+            $.each(rows, function (i, item) {
+                option = option + '<option value="' + item.id + '">'+ item.name +'</option>'
+            })
+            $('#specId').append(option);
+        },
+        error : function() {
+            dialogErrorMsg("获取品名规格异常");
+        }
+    });
+})

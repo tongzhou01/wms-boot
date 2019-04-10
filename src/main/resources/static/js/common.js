@@ -81,3 +81,20 @@ function doValidate(form) {
 function resetValidate(from) {
     from.data("bootstrapValidator").resetForm();
 }
+
+/**
+ * 重置表单
+ * @param id
+ */
+function formReset(id) {
+    document.getElementById(id).reset();
+}
+
+function delTBody(id) {
+    var table_body = document.getElementById(id);
+    if (table_body !== "undefined") {
+        while(table_body .hasChildNodes()){
+            table_body .removeChild(table_body .lastChild)
+        }
+    }
+}
