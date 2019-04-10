@@ -29,7 +29,7 @@ function delTd(obj) {
 }
 
 function addTd(name, val, length) {
-    if(name == 'specId') {
+    if (name == 'specId') {
         return '<input type="hidden" name="' + name + '" value="' + val + '"/>';
     }
     return '<td><input type="hidden" name="' + name + '" value="' + val + '"/>' + val + '</td>';
@@ -59,9 +59,9 @@ function saveOrder() {
     var data = {"orderInfo": orderJson, "orderItems": orderItemJson};
     if (doValidate($orderForm)) {
         $.ajax({
-            contentType:"application/json",
+            contentType: "application/json",
             type: "POST",// 新增请求
-            url: "/order" ,
+            url: "/order",
             data: JSON.stringify(data),
             dataType: "json",//预期服务器返回的数据类型
             success: function (result) {
@@ -69,11 +69,11 @@ function saveOrder() {
                     // location.reload();
                     formReset('orderForm');// 清空表单
                     delTBody('itemBody');// 清空table
-                    resetValidate($orderForm);
+                    resetValidate($orderForm);// 重置验证
                     dialogSuccessMsg("保存成功");
                 }
             },
-            error : function() {
+            error: function () {
                 dialogErrorMsg("保存订单信息异常");
             }
         });
@@ -83,14 +83,14 @@ function saveOrder() {
 function jsonConvert(jsonData) {
     var vCount = 0;
     // 计算json内部的数组最大长度
-    for(var item in jsonData){
+    for (var item in jsonData) {
         var tmp = $.isArray(jsonData[item]) ? jsonData[item].length : 1;
         vCount = (tmp > vCount) ? tmp : vCount;
     }
     var jsonData2 = new Array();
-    for(var i = 0; i < vCount; i++){
+    for (var i = 0; i < vCount; i++) {
         var jsonObj = {};
-        for(var item in jsonData) {
+        for (var item in jsonData) {
             jsonObj[item] = jsonData[item][i];
         }
         jsonData2.push(jsonObj);
@@ -159,7 +159,7 @@ $(function () {
                 }
             },
             deliveryDate: {
-                trigger:'change',
+                trigger: 'change',
                 validators: {
                     notEmpty: {
                         message: '送货日期不能为空'
@@ -240,17 +240,17 @@ $(function () {
 $(function () {
     $.ajax({
         type: "GET",
-        url: "/spec" ,
+        url: "/spec",
         dataType: "json",//预期服务器返回的数据类型
         success: function (result) {
             var rows = result.rows;
             var option = '';
             $.each(rows, function (i, item) {
-                option = option + '<option value="' + item.id + '">'+ item.name +'</option>'
+                option = option + '<option value="' + item.id + '">' + item.name + '</option>'
             })
             $('#specId').append(option);
         },
-        error : function() {
+        error: function () {
             dialogErrorMsg("获取品名规格异常");
         }
     });

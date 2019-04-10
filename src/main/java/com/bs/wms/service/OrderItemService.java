@@ -4,10 +4,11 @@ import com.bs.wms.common.entity.Page;
 import com.bs.wms.common.entity.R;
 import com.bs.wms.entity.OrderItem;
 import com.bs.wms.query.OrderItemQuery;
+import com.bs.wms.vo.OrderItemVO;
 
 public interface OrderItemService {
 
-    Page<OrderItem> listOrderItem(OrderItemQuery orderItemQuery);
+    Page<OrderItemVO> listOrderItem(OrderItemQuery orderItemQuery);
 
     R saveOrderItem(OrderItem orderItem);
 

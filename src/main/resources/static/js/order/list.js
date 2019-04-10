@@ -218,6 +218,7 @@ function saveOrder() {
 //清除弹窗原数据
 $("#orderInfoModal").on("hide.bs.modal", function() {
     document.getElementById("orderForm").reset();
+    resetValidate($('#orderForm'));
 })
 
 $('#deliveryDate').datetimepicker({

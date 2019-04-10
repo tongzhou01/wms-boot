@@ -3,6 +3,7 @@ package com.bs.wms.dao;
 import com.bs.wms.common.base.BaseDao;
 import com.bs.wms.entity.OrderItem;
 import com.bs.wms.query.OrderItemQuery;
+import com.bs.wms.vo.OrderItemVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +18,5 @@ public interface OrderItemDao extends BaseDao<OrderItem> {
 
     int deleteByOrderId(Long orderId);
 
-    List<OrderItem> listOrderItem(OrderItemQuery orderItemQuery);
+    List<OrderItemVO> listOrderItem(OrderItemQuery orderItemQuery);
 }

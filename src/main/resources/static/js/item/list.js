@@ -37,7 +37,7 @@ var TableInit = function () {
             columns: [{
                 checkbox: true
             }, {
-                field: 'itemName',
+                field: 'itemSpec.name',
                 title: '商品名称'
             }, {
                 field: 'reserveNumber',
@@ -87,17 +87,17 @@ function actionFormatter(value, row, index) {
 
 function getData(id) {
     $.ajax({
-        type : "GET",
-        url : "/item/" + id,
-        success : function(result) {
+        type: "GET",
+        url: "/item/" + id,
+        success: function (result) {
             if (result.code == 0) {
                 var data = result.data;
                 console.log(data);
-                $('#itemName').val(data.itemName);
+                $('#specId').val(data.specId);
                 $('#reserveNumber').val(data.reserveNumber);
                 $('#deliveryNumber').val(data.deliveryNumber);
                 $('#unitPrice').val(data.unitPrice);
-                $('#amount').val(data.amount);
+                // $('#amount').val(data.amount); // 自动计算
                 $('#id').val(data.id);
             } else {
                 dialogErrorMsg("查询商品详情异常");
@@ -109,17 +109,20 @@ function getData(id) {
 function addData() {
     // window.location.href = "add";
     $('#itemInfoModal').modal('show');
+    $('#myModalLabel').text('新增');
     $('#submit').show().off("click").on('click', saveItem);
 }
 
 function showData(id) {
     $('#itemInfoModal').modal('show');
+    $('#myModalLabel').text('查看');
     getData(id);
     $('#submit').hide();
 }
 
 function editData(id) {
     $('#itemInfoModal').modal('show');
+    $('#myModalLabel').text('修改');
     getData(id);
     $('#submit').show().off("click").on('click', updateItem);
 }
@@ -134,60 +137,124 @@ function delData(id) {
                 $('#tb_item').bootstrapTable('refresh');
             }
         },
-        error : function() {
+        error: function () {
             dialogErrorMsg("删除商品异常");
         }
     });
 }
 
 function updateItem() {
-    var orderItemForm = $('#orderItemForm').serializeObject();
-    $.ajax({
-        contentType:"application/json",
-        type: "PUT",// 更新请求
-        url: "/item" ,
-        data: JSON.stringify(orderItemForm),
-        dataType: "json",//预期服务器返回的数据类型
-        success: function (result) {
-            if (result.code == 0) {
-                dialogSuccessMsg("保存成功");
+    var $orderItemForm = $('#orderItemForm');
+    var orderItemForm = $orderItemForm.serializeObject();
+    if (doValidate($orderItemForm)) {
+        $.ajax({
+            contentType: "application/json",
+            type: "PUT",// 更新请求
+            url: "/item",
+            data: JSON.stringify(orderItemForm),
+            dataType: "json",//预期服务器返回的数据类型
+            success: function (result) {
+                if (result.code == 0) {
+                    dialogSuccessMsg("保存成功");
+                    $('#itemInfoModal').modal('hide');
+                    $('#tb_item').bootstrapTable('refresh');
+                }
+            },
+            error: function () {
+                dialogErrorMsg("更新商品信息异常");
                 $('#itemInfoModal').modal('hide');
-                $('#tb_item').bootstrapTable('refresh');
             }
-        },
-        error : function() {
-            dialogErrorMsg("更新商品信息异常");
-            $('#itemInfoModal').modal('hide');
-        }
-    });
+        });
+    }
 }
 
 function saveItem() {
-    var orderItemForm = $('#orderItemForm').serializeObject();
-    $.ajax({
-        contentType:"application/json",
-        type: "POST",// 新增请求
-        url: "/item" ,
-        data: JSON.stringify(orderItemForm),
-        dataType: "json",//预期服务器返回的数据类型
-        success: function (result) {
-            if (result.code == 0) {
-                dialogSuccessMsg("保存成功");
+    var $orderItemForm = $('#orderItemForm');
+    var orderItemForm = $orderItemForm.serializeObject();
+    if (doValidate($orderItemForm)) {
+        $.ajax({
+            contentType: "application/json",
+            type: "POST",// 新增请求
+            url: "/item",
+            data: JSON.stringify(orderItemForm),
+            dataType: "json",//预期服务器返回的数据类型
+            success: function (result) {
+                if (result.code == 0) {
+                    dialogSuccessMsg("保存成功");
+                    $('#itemInfoModal').modal('hide');
+                    $('#tb_item').bootstrapTable('refresh');
+                }
+            },
+            error: function () {
+                dialogErrorMsg("保存商品信息异常");
                 $('#itemInfoModal').modal('hide');
-                $('#tb_item').bootstrapTable('refresh');
             }
-        },
-        error : function() {
-            dialogErrorMsg("保存商品信息异常");
-            $('#itemInfoModal').modal('hide');
-        }
-    });
+        });
+    }
 }
 
 //清除弹窗原数据
-$("#itemInfoModal").on("hide.bs.modal", function() {
+$("#itemInfoModal").on("hide.bs.modal", function () {
     document.getElementById("orderItemForm").reset();
-})
+    resetValidate($('#orderItemForm'));
+});
 
+//初始化下拉菜单
+$(function () {
+    $.ajax({
+        type: "GET",
+        url: "/spec",
+        dataType: "json",//预期服务器返回的数据类型
+        success: function (result) {
+            var rows = result.rows;
+            var option = '';
+            $.each(rows, function (i, item) {
+                option = option + '<option value="' + item.id + '">' + item.name + '</option>'
+            })
+            $('#specId').append(option);
+        },
+        error: function () {
+            dialogErrorMsg("获取品名规格异常");
+        }
+    });
+});
 
+$('#orderItemForm').bootstrapValidator({
+    message: 'This value is not valid',
+    feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    fields: {
+        itemName: {
+            validators: {
+                notEmpty: {
+                    message: '商品名称不能为空'
+                }
+            }
+        },
+        reserveNumber: {
+            validators: {
+                notEmpty: {
+                    message: '预定数量不能为空'
+                }
+            }
+        },
+        deliveryNumber: {
+            validators: {
+                notEmpty: {
+                    message: '配送数量不能为空'
+                }
+            }
+        },
+        unitPrice: {
+            validators: {
+                notEmpty: {
+                    message: '单价不能为空'
+                }
+            }
+        }
+    }
+});
 

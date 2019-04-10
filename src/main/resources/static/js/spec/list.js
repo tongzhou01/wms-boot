@@ -42,7 +42,7 @@ var TableInit = function () {
             }, {
                 field: 'unit',
                 title: '单位属性'
-            },{
+            }, {
                 field: 'id',
                 title: '操作',
                 width: 120,
@@ -76,9 +76,9 @@ function actionFormatter(value, row, index) {
 
 function getData(id) {
     $.ajax({
-        type : "GET",
-        url : "/spec/" + id,
-        success : function(result) {
+        type: "GET",
+        url: "/spec/" + id,
+        success: function (result) {
             if (result.code == 0) {
                 var data = result.data;
                 console.log(data);
@@ -123,60 +123,90 @@ function delData(id) {
                 $('#tb_spec').bootstrapTable('refresh');
             }
         },
-        error : function() {
+        error: function () {
             dialogErrorMsg("删除产品规格异常");
         }
     });
 }
 
 function updateSpec() {
-    var specForm = $('#specForm').serializeObject();
-    $.ajax({
-        contentType:"application/json",
-        type: "PUT",// 更新请求
-        url: "/spec" ,
-        data: JSON.stringify(specForm),
-        dataType: "json",//预期服务器返回的数据类型
-        success: function (result) {
-            if (result.code == 0) {
-                dialogSuccessMsg("保存成功");
+    var $specForm = $('#specForm');
+    var specForm = $specForm.serializeObject();
+    if (doValidate($specForm)) {
+        $.ajax({
+            contentType: "application/json",
+            type: "PUT",// 更新请求
+            url: "/spec",
+            data: JSON.stringify(specForm),
+            dataType: "json",//预期服务器返回的数据类型
+            success: function (result) {
+                if (result.code == 0) {
+                    dialogSuccessMsg("保存成功");
+                    $('#specModal').modal('hide');
+                    $('#tb_spec').bootstrapTable('refresh');
+                }
+            },
+            error: function () {
+                dialogErrorMsg("更新产品规格信息异常");
                 $('#specModal').modal('hide');
-                $('#tb_spec').bootstrapTable('refresh');
             }
-        },
-        error : function() {
-            dialogErrorMsg("更新产品规格信息异常");
-            $('#specModal').modal('hide');
-        }
-    });
+        });
+    }
 }
 
 function saveSpec() {
-    var specForm = $('#specForm').serializeObject();
-    $.ajax({
-        contentType:"application/json",
-        type: "POST",// 新增请求
-        url: "/spec" ,
-        data: JSON.stringify(specForm),
-        dataType: "json",//预期服务器返回的数据类型
-        success: function (result) {
-            if (result.code == 0) {
-                dialogSuccessMsg("保存成功");
+    var $specForm = $('#specForm');
+    var specForm = $specForm.serializeObject();
+    if (doValidate($specForm)) {
+        $.ajax({
+            contentType: "application/json",
+            type: "POST",// 新增请求
+            url: "/spec",
+            data: JSON.stringify(specForm),
+            dataType: "json",//预期服务器返回的数据类型
+            success: function (result) {
+                if (result.code == 0) {
+                    dialogSuccessMsg("保存成功");
+                    $('#specModal').modal('hide');
+                    $('#tb_spec').bootstrapTable('refresh');
+                }
+            },
+            error: function () {
+                dialogErrorMsg("保存产品规格信息异常");
                 $('#specModal').modal('hide');
-                $('#tb_spec').bootstrapTable('refresh');
             }
-        },
-        error : function() {
-            dialogErrorMsg("保存产品规格信息异常");
-            $('#specModal').modal('hide');
-        }
-    });
+        });
+    }
 }
 
 //清除弹窗原数据
-$("#specModal").on("hide.bs.modal", function() {
+$("#specModal").on("hide.bs.modal", function () {
     document.getElementById("specForm").reset();
+    resetValidate($('#specForm'));
 })
 
-
+$('#specForm').bootstrapValidator({
+    message: 'This value is not valid',
+    feedbackIcons: {
+        valid: 'glyphicon glyphicon-ok',
+        invalid: 'glyphicon glyphicon-remove',
+        validating: 'glyphicon glyphicon-refresh'
+    },
+    fields: {
+        name: {
+            validators: {
+                notEmpty: {
+                    message: '规格名称不能为空'
+                }
+            }
+        },
+        unit: {
+            validators: {
+                notEmpty: {
+                    message: '单位不能为空'
+                }
+            }
+        }
+    }
+});
 

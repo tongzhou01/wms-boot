@@ -5,6 +5,7 @@ import com.bs.wms.common.entity.R;
 import com.bs.wms.entity.OrderItem;
 import com.bs.wms.query.OrderItemQuery;
 import com.bs.wms.service.OrderItemService;
+import com.bs.wms.vo.OrderItemVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class ItemController {
      * @return
      */
     @GetMapping
-    public Page<OrderItem> getOrderItemList(OrderItemQuery orderItemQuery) {
+    public Page<OrderItemVO> getOrderItemList(OrderItemQuery orderItemQuery) {
         return orderItemService.listOrderItem(orderItemQuery);
     }
 

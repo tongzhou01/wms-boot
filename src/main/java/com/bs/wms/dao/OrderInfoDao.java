@@ -19,4 +19,6 @@ public interface OrderInfoDao extends BaseDao<OrderInfo> {
     Integer selectMaxId();
 
     List<CountVO> getCount(String yearDay);
+
+    void updateTotalAmount(Long orderId);
 }

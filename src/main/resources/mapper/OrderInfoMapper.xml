@@ -236,6 +236,20 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+    <update id="updateTotalAmount">
+        UPDATE order_info oi,
+        (
+            SELECT
+                SUM(amount) sumAmount,
+                order_id
+            FROM
+                order_item ot
+            GROUP BY
+                order_id
+        ) t
+        SET oi.total_amount = t.sumAmount
+        WHERE oi.id = t.order_id AND oi.id = #{orderId}
+    </update>
 
     <select id="listOrder" resultMap="OrderVOResultMap">
         SELECT

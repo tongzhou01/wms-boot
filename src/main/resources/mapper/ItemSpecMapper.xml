@@ -11,11 +11,11 @@
     <sql id="Base_Column_List">
         id, name, unit, create_time, modify_time
     </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from item_spec
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from item_spec
