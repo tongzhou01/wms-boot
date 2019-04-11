@@ -40,10 +40,11 @@
                     <form class="form-horizontal" id="orderItemForm">
                         <input type="hidden" name="id" id="id"/>
                         <input id="orderId" type="hidden" name="orderId" th:value="${param.orderId}"/>
+                        <input id="itemName" type="hidden" name="itemName"/>
                         <div class="form-group">
                             <label for="specId" class="col-sm-2 control-label">商品名称:</label>
                             <div class="col-sm-10">
-                                <select class="form-control" id="specId">
+                                <select class="form-control" name="specId" id="specId">
                                 </select>
                             </div>
                         </div>

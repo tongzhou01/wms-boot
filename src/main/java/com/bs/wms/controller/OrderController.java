@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
  * @RestController 控制器，默认返回json数据
  * @RequestMapping url映射
@@ -109,6 +112,15 @@ public class OrderController {
     @GetMapping("/count/{year}/{day}")
     public R getCount(@PathVariable Integer year, @PathVariable Integer day) {
         return orderInfoService.getCount(year, day);
+    }
+
+    /**
+     * 导出excel
+     * id 订单ID
+     */
+    @GetMapping("/excel/{id}")
+    public void exportExcel(@PathVariable Long id, HttpServletResponse response) throws IOException {
+        orderInfoService.exportExcel(id, response);
     }
 
 }

@@ -1,5 +1,7 @@
 package com.bs.wms.constant;
 
+import java.io.File;
+
 public class BaseConstant {
 
     /**
@@ -51,4 +53,14 @@ public class BaseConstant {
      * 图表类型
      */
     public static final String LINE_TYPE = "line";
+
+    /**
+     * 生成的EXCEL保存路径
+     */
+    public static final String FILE_OUTPUT_EXCEL_PATH = File.separator.concat("download").concat(File.separator).concat("excel").concat(File.separator);
+
+    /**
+     * 商品excel标题
+     */
+    public static final String[] ITEM_TITLE = {"序号", "品名规格", "预定数量", "配送数量", "单价", "金额", "备注"};
 }

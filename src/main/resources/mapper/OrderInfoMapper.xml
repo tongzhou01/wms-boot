@@ -21,8 +21,8 @@
         <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
     <resultMap id="OrderVOResultMap" type="com.bs.wms.vo.OrderInfoVO" extends="BaseResultMap">
-        <collection column="{orderId=id}" select="com.bs.wms.dao.OrderItemDao.selectItemByOrderId" property="orderItems"
-                    ofType="com.bs.wms.entity.OrderItem"/>
+        <collection column="{orderId=id}" select="com.bs.wms.dao.OrderItemDao.listOrderItem" property="orderItems"
+                    ofType="com.bs.wms.vo.OrderItemVO"/>
     </resultMap>
     <sql id="Base_Column_List">
     id, order_no, order_name, order_phone, order_address, company_name, customer_name, 

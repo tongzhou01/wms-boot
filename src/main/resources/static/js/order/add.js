@@ -166,13 +166,13 @@ $(function () {
                     }
                 }
             },
-            signPerson: {
+            /*signPerson: {
                 validators: {
                     notEmpty: {
                         message: '签收人不能为空'
                     }
                 }
-            },
+            },*/
             invoicePerson: {
                 validators: {
                     notEmpty: {

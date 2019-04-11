@@ -45,6 +45,9 @@ var TableInit = function () {
             }, {
                 field: 'deliveryNumber',
                 title: '配送数量'
+            },{
+                field: 'itemSpec.unit',
+                title: '规格'
             }, {
                 field: 'unitPrice',
                 title: '单价'
@@ -144,6 +147,8 @@ function delData(id) {
 }
 
 function updateItem() {
+    var itemName = $('#specId option:selected').text();
+    $('#itemName').val(itemName);
     var $orderItemForm = $('#orderItemForm');
     var orderItemForm = $orderItemForm.serializeObject();
     if (doValidate($orderItemForm)) {
@@ -169,6 +174,8 @@ function updateItem() {
 }
 
 function saveItem() {
+    var itemName = $('#specId option:selected').text();
+    $('#itemName').val(itemName);
     var $orderItemForm = $('#orderItemForm');
     var orderItemForm = $orderItemForm.serializeObject();
     if (doValidate($orderItemForm)) {
@@ -227,7 +234,7 @@ $('#orderItemForm').bootstrapValidator({
         validating: 'glyphicon glyphicon-refresh'
     },
     fields: {
-        itemName: {
+        specId: {
             validators: {
                 notEmpty: {
                     message: '商品名称不能为空'
