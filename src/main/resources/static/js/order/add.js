@@ -108,6 +108,56 @@ $('#deliveryDate').datetimepicker({
 });
 
 $(function () {
+    $('#itemModalForm').bootstrapValidator({
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            itemName: {
+                validators: {
+                    notEmpty: {
+                        message: '商品名称不能为空'
+                    }
+                }
+            },
+            reserveNumber: {
+                validators: {
+                    notEmpty: {
+                        message: '预定数量不能为空'
+                    },
+                    digits: {
+                        message: '该值只能包含数字。'
+                    }
+                }
+            },
+            deliveryNumber: {
+                validators: {
+                    notEmpty: {
+                        message: '配送数量不能为空'
+                    },
+                    digits: {
+                        message: '该值只能包含数字'
+                    }
+                }
+            },
+            unitPrice: {
+                validators: {
+                    notEmpty: {
+                        message: '单价不能为空'
+                    },
+                    regexp: {
+                        regexp: /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/,
+                        message: '格式不正确'
+                    }
+                }
+            }
+        }
+    });
+})
+$(function () {
     $('#orderForm').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {
@@ -196,45 +246,6 @@ $(function () {
             }
         }
     });
-
-    $('#itemModalForm').bootstrapValidator({
-        message: 'This value is not valid',
-        feedbackIcons: {
-            valid: 'glyphicon glyphicon-ok',
-            invalid: 'glyphicon glyphicon-remove',
-            validating: 'glyphicon glyphicon-refresh'
-        },
-        fields: {
-            itemName: {
-                validators: {
-                    notEmpty: {
-                        message: '商品名称不能为空'
-                    }
-                }
-            },
-            reserveNumber: {
-                validators: {
-                    notEmpty: {
-                        message: '预定数量不能为空'
-                    }
-                }
-            },
-            deliveryNumber: {
-                validators: {
-                    notEmpty: {
-                        message: '配送数量不能为空'
-                    }
-                }
-            },
-            unitPrice: {
-                validators: {
-                    notEmpty: {
-                        message: '单价不能为空'
-                    }
-                }
-            }
-        }
-    });
 });
 //初始化下拉菜单
 $(function () {
@@ -254,4 +265,14 @@ $(function () {
             dialogErrorMsg("获取品名规格异常");
         }
     });
-})
+});
+
+//清除弹窗原数据
+$("#orderItemModal").on("hidden.bs.modal", function() {
+    document.getElementById("itemModalForm").reset();
+});
+
+//清除验证
+$("#orderItemModal").on("hide.bs.modal", function() {
+    resetValidate($('#itemModalForm'));
+});

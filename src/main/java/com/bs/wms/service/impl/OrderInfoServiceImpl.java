@@ -13,6 +13,7 @@ import com.bs.wms.entity.OrderItem;
 import com.bs.wms.query.OrderInfoQuery;
 import com.bs.wms.service.OrderInfoService;
 import com.bs.wms.util.DateUtil;
+import com.bs.wms.util.MailUtil;
 import com.bs.wms.vo.CountDataVO;
 import com.bs.wms.vo.CountVO;
 import com.bs.wms.vo.OrderInfoVO;
@@ -25,7 +26,6 @@ import org.apache.poi.ss.util.RegionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -124,8 +124,14 @@ public class OrderInfoServiceImpl implements OrderInfoService {
 
     @Override
     public R sendMail(SendEmailDTO sendEmailDTO) {
-//        MailUtil.sendMail();
-        return null;
+        try {
+            R r = exportExcel(sendEmailDTO.getOrderId());
+            if (r.get("code").toString().equals("0"))
+            MailUtil.sendMail(sendEmailDTO.getReceiverAddress(), "订单附件", "<p>订单附件，请查收。<p>", new File(r.get("filePath").toString()));
+        } catch (Exception e) {
+            return R.error();
+        }
+        return R.ok("发送成功");
     }
 
     @Override
@@ -183,7 +189,7 @@ public class OrderInfoServiceImpl implements OrderInfoService {
     }
 
     @Override
-    public void exportExcel(Long id, HttpServletResponse response) throws IOException {
+    public R exportExcel(Long id) throws IOException {
         OrderInfoVO order = orderInfoDao.getOrder(id);
         String fileName = UUID.randomUUID().toString().concat(".xls");
         String path = BaseConstant.FILE_OUTPUT_EXCEL_PATH.concat(fileName);
@@ -338,11 +344,12 @@ public class OrderInfoServiceImpl implements OrderInfoService {
             os = new FileOutputStream(file);
             workbook.write(os);
         } catch (Exception e) {
-            return;
+            return R.error();
         } finally {
             os.flush();
             os.close();
         }
+        return R.ok().put("filePath", path).put("fileName", fileName);
     }
 
     private void setBorderStyle(CellRangeAddress cra, Sheet sheet) {

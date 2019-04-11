@@ -52,7 +52,7 @@ public class MailUtil {
             messageHelper.setTo(to);
             messageHelper.setSubject(subject);
             messageHelper.setText(html, true);
-            messageHelper.addAttachment("txtFile", new File("E:\\1.txt"));
+            messageHelper.addAttachment("送货单.xls", file);
             mailSender.send(mimeMessage);
             LOGGER.info("成功发送邮件到 - " + to);
             b = true;

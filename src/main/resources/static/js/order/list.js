@@ -81,7 +81,8 @@ function actionFormatter(value, row, index) {
     var id = value;
     var result = "";
     result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"showItem('" + id + "')\" title='商品列表'><span class='glyphicon glyphicon-list-alt'></span></a>";
-    result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"showData('" + id + "')\" title='导出Excel'><span class='glyphicon glyphicon-download-alt'></span></a>";
+    result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"exportExcel('" + id + "')\" title='导出Excel'><span class='glyphicon glyphicon-download-alt'></span></a>";
+    result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"openMailModal('" + id + "')\" title='发送邮件'><span class='glyphicon glyphicon-envelope'></span></a>";
     result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"showData('" + id + "')\" title='预览'><span class='glyphicon glyphicon-search'></span></a>";
     result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"printOrder('" + id + "')\" title='打印'><span class='glyphicon glyphicon-print'></span></a>";
     result += "<a href='javascript:;' class='btn btn-xs ' onclick=\"editData('" + id + "')\" title='编辑'><span class='glyphicon glyphicon-pencil'></span></a>";
@@ -105,6 +106,8 @@ function getData(id) {
                 $('#deliveryDate').val(data.deliveryDate);
                 $('#totalAmount').val(data.totalAmount);
                 $('#signPerson').val(data.signPerson);
+                $('#orderPhone').val(data.orderPhone);
+                $('#orderAddress').val(data.orderAddress);
                 $('#invoicePerson').val(data.invoicePerson);
                 $('#remake').val(data.remake);
                 $('#id').val(data.id);
@@ -113,6 +116,11 @@ function getData(id) {
             }
         }
     });
+}
+
+function openMailModal(id) {
+    $('#orderId').val(id);
+    $('#sendMailModal').modal('show');
 }
 
 function addData() {
@@ -124,6 +132,27 @@ function addData() {
 
 function addData2() {
     window.location.href = "add";
+}
+
+function sendMail() {
+    var $sendMailForm = $('#sendMailForm');
+    var sendMailForm = $sendMailForm.serializeObject();
+    $.ajax({
+        contentType:"application/json",
+        type: "POST",// 更新请求
+        url: "/order/mail",
+        data: JSON.stringify(sendMailForm),
+        dataType: "json",//预期服务器返回的数据类型
+        success: function (result) {
+            if (result.code == 0) {
+                dialogSuccessMsg("发送成功");
+                $('#sendMailModal').modal('hidden');
+            }
+        },
+        error : function() {
+            dialogErrorMsg("发送异常");
+        }
+    });
 }
 
 /*function showData(id) {
@@ -144,6 +173,11 @@ function editData(id) {
     $('#myModalLabel').text('修改');
     getData(id);
     $('#submit').show().off("click").on('click', updateOrder);
+}
+
+// 下载文件
+function exportExcel(id) {
+    window.open("/order/excel/" + id);
 }
 
 function delData(id) {
@@ -168,27 +202,29 @@ function showItem(id) {
 
 
 function updateOrder() {
-    var orderForm = $('#orderForm').serializeObject();
+    var $orderForm = $('#orderForm');
+    var orderForm = $orderForm.serializeObject();
     var data = {"orderInfo":orderForm};
-    console.log("orderForm=" + orderForm);
-    $.ajax({
-        contentType:"application/json",
-        type: "PUT",// 更新请求
-        url: "/order" ,
-        data: JSON.stringify(data),
-        dataType: "json",//预期服务器返回的数据类型
-        success: function (result) {
-            if (result.code == 0) {
-                dialogSuccessMsg("保存成功");
+    if (doValidate($orderForm)) {
+        $.ajax({
+            contentType:"application/json",
+            type: "PUT",// 更新请求
+            url: "/order" ,
+            data: JSON.stringify(data),
+            dataType: "json",//预期服务器返回的数据类型
+            success: function (result) {
+                if (result.code == 0) {
+                    dialogSuccessMsg("保存成功");
+                    $('#orderInfoModal').modal('hide');
+                    $('#tb_order').bootstrapTable('refresh');
+                }
+            },
+            error : function() {
+                dialogErrorMsg("更新订单信息异常");
                 $('#orderInfoModal').modal('hide');
-                $('#tb_order').bootstrapTable('refresh');
             }
-        },
-        error : function() {
-            dialogErrorMsg("更新订单信息异常");
-            $('#orderInfoModal').modal('hide');
-        }
-    });
+        });
+    }
 }
 
 function saveOrder() {
@@ -215,11 +251,136 @@ function saveOrder() {
     });
 }
 
-//清除弹窗原数据
-$("#orderInfoModal").on("hide.bs.modal", function() {
-    document.getElementById("orderForm").reset();
-    resetValidate($('#orderForm'));
+$(function () {
+    $('#orderForm').bootstrapValidator({
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            orderName: {
+                validators: {
+                    notEmpty: {
+                        message: '订单名称不能为空'
+                    }
+                }
+            },
+            companyName: {
+                validators: {
+                    notEmpty: {
+                        message: '公司名称不能为空'
+                    }
+                }
+            },
+            customerName: {
+                validators: {
+                    notEmpty: {
+                        message: '顾客姓名不能为空'
+                    }
+                }
+            },
+            totalAmount: {
+                validators: {
+                    notEmpty: {
+                        message: '总金额不能为空'
+                    }
+                }
+            },
+            deliveryPerson: {
+                validators: {
+                    notEmpty: {
+                        message: '送货人不能为空'
+                    }
+                }
+            },
+            deliveryAddress: {
+                validators: {
+                    notEmpty: {
+                        message: '送货地址不能为空'
+                    }
+                }
+            },
+            deliveryDate: {
+                trigger: 'change',
+                validators: {
+                    notEmpty: {
+                        message: '送货日期不能为空'
+                    }
+                }
+            },
+            /*signPerson: {
+                validators: {
+                    notEmpty: {
+                        message: '签收人不能为空'
+                    }
+                }
+            },*/
+            invoicePerson: {
+                validators: {
+                    notEmpty: {
+                        message: '开票人不能为空'
+                    }
+                }
+            },
+            orderPhone: {
+                validators: {
+                    notEmpty: {
+                        message: '订货电话不能为空'
+                    }
+                }
+            },
+            orderAddress: {
+                validators: {
+                    notEmpty: {
+                        message: '定货地址不能为空'
+                    }
+                }
+            }
+        }
+    });
+});
+
+$(function () {
+    $('#sendMailForm').bootstrapValidator({
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            receiverAddress: {
+                validators: {
+                    notEmpty: {
+                        message: '邮箱地址不能为空'
+                    }
+                }
+            },
+        }
+    });
 })
+
+//清除弹窗原数据
+$("#orderInfoModal").on("hidden.bs.modal", function() {
+    document.getElementById("orderForm").reset();
+});
+
+//清除验证
+$("#orderInfoModal").on("hide.bs.modal", function() {
+    resetValidate($('#orderForm'));
+});
+
+//清除弹窗原数据
+$("#sendMailModal").on("hidden.bs.modal", function() {
+    document.getElementById("sendMailForm").reset();
+});
+
+//清除验证
+$("#sendMailModal").on("hide.bs.modal", function() {
+    resetValidate($('#sendMailForm'));
+});
 
 $('#deliveryDate').datetimepicker({
     minView: "month",

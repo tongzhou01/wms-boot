@@ -7,12 +7,14 @@ import com.bs.wms.dto.SaveOrderDTO;
 import com.bs.wms.dto.SendEmailDTO;
 import com.bs.wms.query.OrderInfoQuery;
 import com.bs.wms.service.OrderInfoService;
+import com.bs.wms.util.FileUtil;
 import com.bs.wms.vo.OrderInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -120,7 +122,11 @@ public class OrderController {
      */
     @GetMapping("/excel/{id}")
     public void exportExcel(@PathVariable Long id, HttpServletResponse response) throws IOException {
-        orderInfoService.exportExcel(id, response);
+        R r = orderInfoService.exportExcel(id);
+        Object filePath = r.get("filePath");
+        Object fileName = r.get("fileName");
+        if (filePath != null && fileName != null) {
+            FileUtil.downloadFile(new File(filePath.toString()), response, fileName.toString());
+        }
     }
-
 }

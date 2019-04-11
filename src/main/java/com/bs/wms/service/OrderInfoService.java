@@ -7,7 +7,6 @@ import com.bs.wms.dto.SendEmailDTO;
 import com.bs.wms.query.OrderInfoQuery;
 import com.bs.wms.vo.OrderInfoVO;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public interface OrderInfoService {
@@ -65,5 +64,5 @@ public interface OrderInfoService {
      * 导出excel
      * @param id
      */
-    void exportExcel(Long id, HttpServletResponse response) throws IOException;
+    R exportExcel(Long id) throws IOException;
 }
