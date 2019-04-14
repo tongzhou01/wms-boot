@@ -15,7 +15,8 @@
         <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime"/>
     </resultMap>
     <resultMap id="OrderItemVOMap" type="com.bs.wms.vo.OrderItemVO" extends="BaseResultMap">
-        <association column="{id=spec_id}" select="com.bs.wms.dao.ItemSpecDao.selectByPrimaryKey" property="itemSpec" javaType="com.bs.wms.entity.ItemSpec" ></association>
+        <association column="{id=spec_id}" select="com.bs.wms.dao.ItemSpecDao.selectByPrimaryKey" property="itemSpec" javaType="com.bs.wms.entity.ItemSpec" >
+        </association>
     </resultMap>
     <sql id="Base_Column_List">
         id, order_id, spec_id, item_name, reserve_number, delivery_number, unit_price, amount,

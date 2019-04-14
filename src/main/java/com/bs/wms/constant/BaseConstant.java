@@ -57,7 +57,7 @@ public class BaseConstant {
     /**
      * 生成的EXCEL保存路径
      */
-    public static final String FILE_OUTPUT_EXCEL_PATH = File.separator.concat("download").concat(File.separator).concat("excel").concat(File.separator);
+    public static final String FILE_OUTPUT_EXCEL_PATH = File.separator.concat("Users").concat(File.separator).concat("zhangcj").concat(File.separator).concat("Downloads").concat(File.separator).concat("excel").concat(File.separator);
 
     /**
      * 商品excel标题

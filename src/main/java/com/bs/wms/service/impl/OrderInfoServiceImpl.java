@@ -8,6 +8,7 @@ import com.bs.wms.dao.OrderInfoDao;
 import com.bs.wms.dao.OrderItemDao;
 import com.bs.wms.dto.SaveOrderDTO;
 import com.bs.wms.dto.SendEmailDTO;
+import com.bs.wms.entity.ItemSpec;
 import com.bs.wms.entity.OrderInfo;
 import com.bs.wms.entity.OrderItem;
 import com.bs.wms.query.OrderInfoQuery;
@@ -279,10 +280,11 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         for (int i = 0; i < orderItems.size(); i++) {
             rowItem = sheet.createRow(rows++);
             OrderItemVO orderItemVO = orderItems.get(i);
+            ItemSpec itemSpec = orderItemVO.getItemSpec();
             rowItem.createCell(0).setCellValue(i + 1);
-            rowItem.createCell(1).setCellValue(orderItemVO.getItemSpec().getName());
-            rowItem.createCell(2).setCellValue(orderItemVO.getReserveNumber() + "|" + orderItemVO.getItemSpec().getUnit());
-            rowItem.createCell(3).setCellValue(orderItemVO.getDeliveryNumber() + "|" + orderItemVO.getItemSpec().getUnit());
+            rowItem.createCell(1).setCellValue(itemSpec == null ? "" : itemSpec.getName());
+            rowItem.createCell(2).setCellValue(orderItemVO.getReserveNumber() + "|" + itemSpec == null ? "" : itemSpec.getUnit());
+            rowItem.createCell(3).setCellValue(orderItemVO.getDeliveryNumber() + "|" + itemSpec ==null ? "" : itemSpec.getUnit());
             rowItem.createCell(4).setCellValue(orderItemVO.getUnitPrice() == null ? "" : orderItemVO.getUnitPrice().toString());
             rowItem.createCell(5).setCellValue(orderItemVO.getAmount() == null ? "" : orderItemVO.getAmount().toString());
             rowItem.createCell(6).setCellValue(orderItemVO.getRemark());
@@ -346,8 +348,10 @@ public class OrderInfoServiceImpl implements OrderInfoService {
         } catch (Exception e) {
             return R.error();
         } finally {
-            os.flush();
-            os.close();
+            if (os != null) {
+                os.flush();
+                os.close();
+            }
         }
         return R.ok().put("filePath", path).put("fileName", fileName);
     }
