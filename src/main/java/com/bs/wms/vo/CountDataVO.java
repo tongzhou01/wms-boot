@@ -2,12 +2,24 @@ package com.bs.wms.vo;
 
 import java.math.BigDecimal;
 
+/**
+ * 统计数据展示对象
+ */
 public class CountDataVO {
 
+    /**
+     * 名称
+     */
     private String name;
 
+    /**
+     * 数据数组
+     */
     private BigDecimal[] data;
 
+    /**
+     * 类型
+     */
     private String type;
 
     public String getName() {

@@ -2,16 +2,34 @@ package com.bs.wms.vo;
 
 import java.math.BigDecimal;
 
+/**
+ * 统计展示对象
+ */
 public class CountVO {
 
+    /**
+     * 公司名称
+     */
     private String companyName;
 
+    /**
+     * 年
+     */
     private Integer year;
 
+    /**
+     * 月
+     */
     private Integer month;
 
+    /**
+     * 日
+     */
     private Integer day;
 
+    /**
+     * 总金额
+     */
     private BigDecimal totalAmount;
 
     public CountVO(String companyName, Integer year, Integer month, Integer day, BigDecimal totalAmount) {
