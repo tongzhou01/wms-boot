@@ -8,14 +8,14 @@ import java.util.Date;
 public class DateUtil {
 
     private static SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-    private static SimpleDateFormat datetime = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss");
+
+    private static SimpleDateFormat datetime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     private static final String CRON_DATE_FORMAT = "ss mm HH dd MM ? yyyy";
 
     public static Date getNowDate() {
         return new Date();
     }
-    // ****************************当前时间相关****************************
 
     /***
      *
